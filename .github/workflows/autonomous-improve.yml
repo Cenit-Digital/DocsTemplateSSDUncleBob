@@ -49,18 +49,42 @@ jobs:
 
       - name: Ejecutar el agente de mejora (Claude Code)
         uses: anthropics/claude-code-action@v1
+        env:
+          # Para que `gh` (crear PR / auto-merge) esté autenticado dentro del agente.
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           # Autenticación por SUSCRIPCIÓN Claude Pro/Max (token OAuth).
           # Alternativa: anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
           claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
           prompt: |
-            Eres el agente de auto-mejora de esta documentación viva del arnés SDD "Uncle Bob".
-            Lee y sigue AL PIE DE LA LETRA el protocolo en .github/AUTONOMOUS.md.
-            Enfoque opcional de esta ejecución (si no está vacío): "${{ github.event.inputs.focus }}".
-            Reglas críticas: no inventes; cita fuentes oficiales; NO toques el código de los ejemplos
-            sin motivo; asegúrate de que `npm run build` pasa en verde ANTES de abrir el PR; abre UN
-            Pull Request con rama propia y activa el auto-merge (gh pr merge --auto --squash).
+            Eres el agente de auto-mejora de esta documentación viva (Astro Starlight, español)
+            del arnés SDD "Uncle Bob". Enfoque opcional de esta ejecución (si no está vacío):
+            "${{ github.event.inputs.focus }}".
+
+            Sigue AL PIE DE LA LETRA el protocolo de .github/AUTONOMOUS.md. Resumen:
+            1. Lee README.md, CLAUDE.md, .github/AUTONOMOUS.md y
+               src/content/docs/evolucion/changelog.md (no repitas lo ya hecho).
+            2. Aplica UNA mejora concreta y pequeña (claridad o contenido del método),
+               apoyada en fuentes oficiales citadas. NO inventes. NO toques
+               .github/workflows/ ni secretos. Si añades una página, enlázala en el
+               sidebar de astro.config.mjs.
+            3. Añade una entrada a src/content/docs/evolucion/changelog.md con la fecha
+               real (obtenla con `date +%F`), resumen, motivo y fuentes.
+            4. Verifica que `npm run build` pasa EN VERDE. Si falla, arréglalo (enlaces
+               rotos, frontmatter YAML, MDX).
+            5. Publica como Pull Request y activa el auto-merge, ejecutando en Bash:
+                 git config user.name  "auto-mejora-bot"
+                 git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+                 BR="auto-mejora/$(date +%F)-$(date +%H%M%S)"
+                 git checkout -b "$BR"
+                 git add -A
+                 git commit -m "docs: <resumen de la mejora>"
+                 git push -u origin "$BR"
+                 gh pr create --base main --head "$BR" --title "Auto-mejora: <resumen>" --body "<qué, por qué y fuentes>"
+                 gh pr merge --auto --squash "$BR"
+               Si no hay una mejora clara y fundamentada, haz una mejora mínima de
+               claridad y regístrala igualmente (no fuerces cambios artificiales).
           claude_args: |
             --max-turns 40
-            --model claude-opus-4-8
+            --model claude-sonnet-5
             --allowedTools Read,Edit,Write,Glob,Grep,Bash,WebSearch,WebFetch
