@@ -21,6 +21,15 @@ Las entradas se ordenan de más reciente a más antigua. La más nueva arriba.
 
 ## Entradas
 
+### 2026-07-10 — Corrige enlaces rotos en "Introducción"
+
+En `empezar/introduccion.md`, la sección "Por dónde seguir" enlazaba a slugs
+que no existen (`empezar/que-es-el-arnes-sdd/`, `metodo/flujo-completo/`).
+El build de Astro no lo detecta porque no hay comprobador de enlaces
+configurado, así que era un 404 silencioso desde la primera página que lee
+cualquier persona. Corregido a los slugs reales del sidebar
+(`empezar/que-es/`, `metodo/flujo/`, ver `astro.config.mjs`).
+
 ### 2026-07-10 — Génesis
 
 Creación de la plantilla agnóstica al lenguaje y de esta documentación viva.

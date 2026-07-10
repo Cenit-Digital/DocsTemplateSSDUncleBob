@@ -32,5 +32,5 @@ El material se reparte en dos repos:
 
 ## Por dónde seguir
 
-- [Qué es el arnés SDD](/DocsTemplateSSDUncleBob/empezar/que-es-el-arnes-sdd/)
-- [El flujo completo](/DocsTemplateSSDUncleBob/metodo/flujo-completo/)
+- [Qué es el arnés SDD](/DocsTemplateSSDUncleBob/empezar/que-es/)
+- [El flujo completo](/DocsTemplateSSDUncleBob/metodo/flujo/)
