@@ -1,0 +1,85 @@
+name: Auto-mejora del método (bot autónomo)
+
+# Ciclo virtuoso: dos veces por semana, Claude investiga el estado del arte,
+# propone UNA mejora acotada a la documentación/método, verifica que el sitio
+# compila, abre un Pull Request y encola el auto-merge. El PR solo se fusiona
+# si el job `build` de CI pasa (ver ci.yml + protección de rama).
+#
+# Autonomía CON red de seguridad (decisión del proyecto): PR + auto-merge si CI verde.
+# Sin intervención humana salvo la configuración inicial (ver ciclo-virtuoso/auto-mejora).
+
+on:
+  schedule:
+    # 05:30 UTC los lunes (1) y jueves (4). cron de 5 campos en UTC.
+    - cron: '30 5 * * 1,4'
+  # Permite dispararlo a mano desde la pestaña Actions (los cron solo usan main).
+  workflow_dispatch: {}
+
+# Menor privilegio: crear rama/commits y abrir el PR. id-token por si se usa OIDC.
+permissions:
+  contents: write
+  pull-requests: write
+  id-token: write
+
+# Evita solapes si una ejecución se alarga.
+concurrency:
+  group: self-improve
+  cancel-in-progress: false
+
+jobs:
+  improve:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node
+        uses: actions/setup-node@v6
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Claude — investiga, mejora, abre PR y encola auto-merge
+        uses: anthropics/claude-code-action@v1
+        with:
+          # Auth por SUSCRIPCIÓN (Pro/Max): token de `claude setup-token`.
+          # Alternativa: usa `anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}`.
+          claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+          # Token de git para abrir el PR. Si defines BOT_GH_TOKEN (PAT de grano
+          # fino o token de GitHub App), el PR DISPARARÁ el CI del que depende el
+          # auto-merge; si no, cae al GITHUB_TOKEN (cuyos PR NO disparan workflows).
+          github_token: ${{ secrets.BOT_GH_TOKEN || secrets.GITHUB_TOKEN }}
+          prompt: |
+            Eres el guardián de la documentación viva del método "Arnés SSD de
+            Uncle Bob (edición artesano)". Lee CLAUDE.md (tu manual de operación)
+            y ciclo-virtuoso/registro-evolucion antes de nada.
+
+            Tarea de esta ejecución:
+            1. Investiga el estado del arte reciente en desarrollo asistido por IA,
+               harness engineering, SDD, TDD con agentes y mutation testing, SOLO
+               en fuentes oficiales o de primera mano. NO inventes nada.
+            2. Elige UNA mejora acotada y de alto valor para el método o su
+               documentación (una página nueva, una sección más rigurosa, una
+               corrección, una técnica mejor). Nada de reescrituras masivas.
+            3. Aplícala editando los archivos de src/content/docs/ (y, si procede,
+               la configuración). Respeta la regla de CERO alucinación y el estilo
+               en español.
+            4. Añade una entrada nueva al registro de evolución
+               (src/content/docs/ciclo-virtuoso/registro-evolucion.md) con fecha,
+               qué cambiaste, por qué, y las fuentes citadas.
+            5. Verifica que el sitio compila limpio: `npm run build`. Si falla,
+               corrige hasta dejarlo en verde. NO abras el PR con el build roto.
+            6. Crea una rama nueva, commitea, y abre un Pull Request contra `main`
+               con un título claro y un resumen de la mejora y sus fuentes.
+            7. Encola el auto-merge del PR:  `gh pr merge --auto --squash`
+               (solo se fusionará cuando el job `build` de CI pase).
+            Si en esta ejecución no encuentras ninguna mejora sólida y verificable,
+            NO abras ningún PR: es preferible no tocar nada que degradar el método.
+          claude_args: |
+            --max-turns 40
+            --allowedTools "Bash(npm ci),Bash(npm run build),Bash(npm run *),Bash(git *),Bash(gh pr *),Bash(gh api *),Read,Edit,Write,Glob,Grep,WebSearch,WebFetch"

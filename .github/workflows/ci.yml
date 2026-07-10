@@ -1,0 +1,31 @@
+name: CI
+
+# Puerta de calidad: construye la documentación en cada PR y push a main.
+# El job `build` es el "required status check" del que depende el auto-merge:
+# ningún PR (ni el del bot autónomo) se fusiona si el sitio no compila limpio.
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      - name: Setup Node
+        uses: actions/setup-node@v6
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build (astro build, falla ante errores)
+        run: npm run build

@@ -1,0 +1,81 @@
+---
+title: "Arnés SSD de Uncle Bob"
+description: "Documentación viva del Arnés SSD de Uncle Bob (edición artesano): disciplina verificable para que agentes de IA construyan software con spec conversada, Gherkin, TDD estricto, review y mutación."
+template: splash
+hero:
+  tagline: >-
+    Disciplina verificable para que los agentes de IA construyan software:
+    spec conversada → Gherkin → TDD estricto → judge → mutación.
+  actions:
+    - text: Empieza por el método
+      link: ./fundamentos/el-metodo/
+      icon: right-arrow
+      variant: primary
+    - text: Ver la plantilla
+      link: https://github.com/Cenit-Digital/TemplateSSDUncleBob
+      icon: external
+      variant: minimal
+---
+
+import { Card, CardGrid } from '@astrojs/starlight/components';
+
+El **Arnés SSD de Uncle Bob (edición artesano)** es un *harness*: el código, la
+configuración y la lógica de ejecución que rodean al modelo para convertir una
+conversación en software con disciplina. No añade otro modelo; añade **reglas,
+orquestación y verificación** para que los agentes de IA trabajen como artesanos
+y no como generadores de texto plausible.
+
+## Qué resuelve
+
+Los agentes escriben código con facilidad, pero sin restricciones producen
+sistemas que nadie ha acordado y que nadie puede verificar. Este arnés impone un
+único camino, gobernado y medible, desde la intención hasta el código probado:
+
+1. **Spec conversada (SDD).** El agente `spec_partner` conversa y debate contigo
+   hasta destilar un `project-spec.md` con decisiones razonadas.
+2. **Gherkin.** El agente `gherkin_author` transforma esa spec en escenarios
+   ejecutables `.feature`: el contrato del comportamiento.
+3. **Puerta humana.** Apruebas el contrato Gherkin *antes* de que se escriba
+   código. Es la única puerta de aprobación, y es la más barata.
+4. **TDD estricto.** El agente `tdd_craftsman` implementa en ciclos
+   rojo-verde-refactor, un test a la vez.
+5. **Review y mutación.** El `judge` revisa disciplina y calidad; el
+   `mutation_tester` mide si la suite realmente detecta cambios en el código.
+
+:::tip[Documentación viva]
+Este sitio no es un manual estático. Es **documentación viva** que se
+auto-mejora: forma parte del arnés y evoluciona con el método a medida que el
+propio sistema aprende de cada feature construida.
+:::
+
+## Por dónde empezar
+
+<CardGrid>
+  <Card title="¿Qué es Harness Engineering?" icon="setting">
+    El encuadre: *Agent = Model + Harness*. Por qué el arnés —no el modelo— es
+    donde se hace la ingeniería.
+    [Leer el encuadre](fundamentos/harness-engineering/)
+  </Card>
+  <Card title="El método de un vistazo" icon="rocket">
+    El pipeline de cinco fases, la regla de una feature a la vez y la única
+    puerta humana.
+    [Ver el método](fundamentos/el-metodo/)
+  </Card>
+  <Card title="Los seis agentes" icon="puzzle">
+    Quién hace qué: `craftsman_lead`, `spec_partner`, `gherkin_author`,
+    `tdd_craftsman`, `judge` y `mutation_tester`.
+    [Conocer a los agentes](agentes/vision-general/)
+  </Card>
+  <Card title="El ciclo virtuoso" icon="approve-check">
+    Documentación viva y auto-mejora: cómo el arnés se corrige y crece con cada
+    iteración.
+    [Ver el ciclo](ciclo-virtuoso/documentacion-viva/)
+  </Card>
+</CardGrid>
+
+:::note[Atribución]
+El método está inspirado en las prácticas de Robert C. Martin (Uncle Bob) y en
+el trabajo divulgado por **BettaTech**. Las consignas pedagógicas del arnés son
+formulación del método, no citas verbatim de Martin. Consulta
+[Atribución y fuentes](fuentes/atribucion/) para el detalle.
+:::
