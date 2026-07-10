@@ -1,0 +1,66 @@
+name: Auto-mejora de la documentación
+
+# El "ciclo virtuoso": un agente de Claude revisa y mejora esta documentación
+# de forma autónoma dos veces por semana (martes y viernes). Abre un Pull
+# Request; sólo se auto-mergea si la CI (astro build) pasa en verde. El humano
+# puede vetar cualquier PR. Ver docs de "Evolución autónoma" y .github/AUTONOMOUS.md.
+#
+# REQUISITO HUMANO (único paso manual): añadir el secret CLAUDE_CODE_OAUTH_TOKEN
+# (genéralo con `claude setup-token` en tu terminal con suscripción Pro/Max) en
+# Settings → Secrets and variables → Actions. Alternativa: ANTHROPIC_API_KEY.
+
+on:
+  schedule:
+    - cron: "0 6 * * 2" # martes 06:00 UTC
+    - cron: "0 6 * * 5" # viernes 06:00 UTC
+  workflow_dispatch:
+    inputs:
+      focus:
+        description: "Tema opcional en el que enfocar la mejora"
+        required: false
+        default: ""
+
+permissions:
+  contents: write
+  pull-requests: write
+
+concurrency:
+  group: autonomous-improve
+  cancel-in-progress: false
+
+jobs:
+  improve:
+    name: Agente de auto-mejora
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Node 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+
+      - name: Instalar dependencias
+        run: npm ci
+
+      - name: Ejecutar el agente de mejora (Claude Code)
+        uses: anthropics/claude-code-action@v1
+        with:
+          # Autenticación por SUSCRIPCIÓN Claude Pro/Max (token OAuth).
+          # Alternativa: anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
+          claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+          prompt: |
+            Eres el agente de auto-mejora de esta documentación viva del arnés SDD "Uncle Bob".
+            Lee y sigue AL PIE DE LA LETRA el protocolo en .github/AUTONOMOUS.md.
+            Enfoque opcional de esta ejecución (si no está vacío): "${{ github.event.inputs.focus }}".
+            Reglas críticas: no inventes; cita fuentes oficiales; NO toques el código de los ejemplos
+            sin motivo; asegúrate de que `npm run build` pasa en verde ANTES de abrir el PR; abre UN
+            Pull Request con rama propia y activa el auto-merge (gh pr merge --auto --squash).
+          claude_args: |
+            --max-turns 40
+            --model claude-opus-4-8
+            --allowedTools Read,Edit,Write,Glob,Grep,Bash,WebSearch,WebFetch

@@ -1,0 +1,87 @@
+---
+title: 'Los agentes: 6 del pipeline + 3 de apoyo'
+description: 'Rol de cada subagente: quién orquesta, quién implementa, quién poda, quién mide.'
+---
+
+import { Card, CardGrid, Aside } from '@astrojs/starlight/components';
+
+Cada agente hace **una cosa** y la hace por escrito. El borrador es barato; el juicio es el juego entero: _"Agents draft, judgment prunes."_ Por eso el trabajo se reparte en roles con límites duros.
+
+## Los 6 agentes del pipeline
+
+Toda feature con `"sdd": true` recorre cinco fases y una sola puerta de aprobación humana, justo sobre los escenarios Gherkin.
+
+<CardGrid>
+  <Card title="craftsman_lead — orquesta" icon="rocket">
+    **Rol:** descompone, coordina y custodia la disciplina; nunca implementa.
+    **Escribe:** referencias y coordinación (lanza subagentes).
+    **NO hace:** editar `src/` ni tests, marcar `done`, saltar la puerta humana, cerrar sin `judge` aprobado y mutación superada.
+  </Card>
+  <Card title="spec_partner — debate" icon="comment">
+    **Rol:** conversa y debate con el humano hasta destilar `project-spec.md`.
+    **Escribe:** `project-spec.md` (propósito, comportamiento, contrato, casos límite, decisiones).
+    **NO hace:** código, tests ni Gherkin; no toca `src/`; no marca `done`.
+  </Card>
+  <Card title="gherkin_author — destila" icon="document">
+    **Rol:** convierte una sección del spec en el contrato ejecutable.
+    **Escribe:** `features/<name>.feature` con escenarios `@s1..@sn`; cambia el status a `spec_ready`.
+    **NO hace:** código ni tests; solo `spec_ready`, nunca `in_progress` ni `done`.
+  </Card>
+  <Card title="tdd_craftsman — implementa" icon="pencil">
+    **Rol:** implementa UNA feature por TDD estricto, Rojo → Verde → Refactor.
+    **Escribe:** código en `src/`, tests y `progress/tdd_<name>.md`.
+    **NO hace:** producción sin un test rojo que la pida; no adelanta código; no marca `done` por su cuenta.
+  </Card>
+  <Card title="judge — poda" icon="approve-check">
+    **Rol:** el review es el juego entero; aprueba o rechaza contra el `.feature`, `docs/` y `CHECKPOINTS.md`.
+    **Escribe:** `progress/judge_<name>.md` (`APPROVED` / `CHANGES_REQUESTED`).
+    **NO hace:** editar código; aprobar con tests rojos o con algún `@s` sin test.
+  </Card>
+  <Card title="mutation_tester — mide" icon="seti:clock">
+    **Rol:** valida que los tests muerden con prueba de mutación por encima del umbral.
+    **Escribe:** `progress/mutation_<name>.md` (`PASS` / `FAIL`, score).
+    **NO hace:** editar `src/` ni tests; declarar `PASS` por debajo del umbral.
+  </Card>
+</CardGrid>
+
+<Aside type="note">
+El `judge` juzga diseño y cobertura de escenarios; la mutación mide si los tests realmente muerden. _"The review step is the whole game."_ Un mutante sobreviviente no lo arregla quien mide: lo talla el `tdd_craftsman`.
+</Aside>
+
+## Los 3 agentes de apoyo (opcionales, solo lectura)
+
+No forman parte obligatoria del pipeline y **no editan código**: señalan, no arreglan. No sustituyen al `judge` ni al `mutation_tester`.
+
+<CardGrid>
+  <Card title="security_reviewer" icon="warning">
+    **Rol:** auditoría AppSec que el `craftsman_lead` convoca cuando la feature toca una frontera de confianza (entrada de usuario, auth, secretos, red, terceros).
+    **Escribe:** `progress/security_<name>.md` por severidad, citando `archivo:línea`.
+    **NO hace:** editar código; leer `.env` reales ni claves.
+  </Card>
+  <Card title="a11y_seo_auditor" icon="star">
+    **Rol:** auditoría de accesibilidad (WCAG 2.1 AA) y SEO para features con UI web.
+    **Escribe:** `progress/audit_a11y_seo_<name>.md` por impacto, citando `archivo:línea`.
+    **NO hace:** editar código. Si el proyecto no tiene UI web, se borra.
+  </Card>
+  <Card title="mentor" icon="open-book">
+    **Rol:** explica el _porqué_ de las decisiones del repo y del código, para aprender; se convoca a demanda.
+    **Escribe:** la explicación directa (o `EXPLAINED -> <archivo>` si se pide guardar).
+    **NO hace:** implementar ni editar; no es una puerta del pipeline.
+  </Card>
+</CardGrid>
+
+## Tabla resumen
+
+| Agente | Rol en una frase | Qué escribe | Qué NO hace |
+| --- | --- | --- | --- |
+| `craftsman_lead` | Orquesta las 5 fases. | Coordinación y referencias. | No implementa ni marca `done`. |
+| `spec_partner` | Debate el spec. | `project-spec.md`. | No escribe código, tests ni Gherkin. |
+| `gherkin_author` | Destila el contrato. | `features/<name>.feature`. | No escribe código ni tests. |
+| `tdd_craftsman` | Implementa por TDD. | `src/`, tests, `progress/tdd_*`. | No hay producción sin test rojo. |
+| `judge` | Poda: aprueba o rechaza. | `progress/judge_*`. | No edita código. |
+| `mutation_tester` | Mide que los tests muerden. | `progress/mutation_*`. | No edita ni fuerza el `PASS`. |
+| `security_reviewer` | Audita seguridad (opcional). | `progress/security_*`. | No edita ni lee secretos. |
+| `a11y_seo_auditor` | Audita a11y y SEO (opcional). | `progress/audit_a11y_seo_*`. | No edita código. |
+| `mentor` | Enseña el porqué (a demanda). | Explicación directa. | No implementa ni es puerta. |
+
+Cada resultado vive en disco y cada agente devuelve **una sola línea** de referencia: es la regla anti-teléfono-descompuesto.

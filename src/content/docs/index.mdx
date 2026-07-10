@@ -1,0 +1,46 @@
+---
+title: Arnés SDD · Uncle Bob
+description: Documentación viva del arnés de desarrollo con IA estilo Robert C. Martin. Spec conversada → Gherkin → TDD estricto → review → mutación. Agnóstico al lenguaje.
+template: splash
+hero:
+  tagline: Un arnés para que la IA desarrolle de forma autónoma y verificable, con una sola puerta humana sobre el contrato. Spec conversada → Gherkin → TDD estricto → review → mutación.
+  actions:
+    - text: Empezar
+      link: /DocsTemplateSSDUncleBob/empezar/introduccion/
+      icon: right-arrow
+    - text: La plantilla en GitHub
+      link: https://github.com/Cenit-Digital/TemplateSSDUncleBob
+      icon: external
+      variant: minimal
+---
+
+import { Card, CardGrid } from '@astrojs/starlight/components';
+
+## El método en cinco fases
+
+<CardGrid>
+	<Card title="1 · Spec conversada" icon="comment">
+		El `spec_partner` **debate** la especificación contigo hasta cerrar una
+		"hard spec" con decisiones razonadas. [Ver](/DocsTemplateSSDUncleBob/metodo/spec/)
+	</Card>
+	<Card title="2 · Gherkin" icon="approve-check">
+		Se destila en escenarios `Given/When/Then`: el contrato ejecutable que
+		**tú apruebas**. [Ver](/DocsTemplateSSDUncleBob/metodo/gherkin/)
+	</Card>
+	<Card title="3 · TDD estricto" icon="seti:clock">
+		Un test a la vez: Rojo → Verde → Refactor. Las Tres Leyes.
+		[Ver](/DocsTemplateSSDUncleBob/metodo/tdd/)
+	</Card>
+	<Card title="4 · El juez" icon="warning">
+		"The review step is the whole game." El juicio poda; no edita.
+		[Ver](/DocsTemplateSSDUncleBob/metodo/judge/)
+	</Card>
+	<Card title="5 · Mutación" icon="random">
+		Se valida que los tests **muerden**: se introducen defectos y algún test
+		debe fallar. [Ver](/DocsTemplateSSDUncleBob/metodo/mutacion/)
+	</Card>
+	<Card title="Agnóstico + vivo" icon="rocket">
+		Sirve para cualquier stack (Python, Node, Go…) y esta documentación
+		**se mejora sola**. [Ver](/DocsTemplateSSDUncleBob/evolucion/ciclo-virtuoso/)
+	</Card>
+</CardGrid>

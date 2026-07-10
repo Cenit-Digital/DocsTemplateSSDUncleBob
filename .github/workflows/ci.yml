@@ -1,0 +1,28 @@
+name: CI
+
+# Puerta de calidad: el sitio DEBE construir sin errores (enlaces rotos,
+# frontmatter inválido, etc. hacen fallar `astro build`). Es el check que
+# habilita el auto-merge de los PRs del bot de auto-mejora.
+on:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    name: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Node 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+      - name: Instalar dependencias
+        run: npm ci
+      - name: Construir el sitio (astro build)
+        run: npm run build

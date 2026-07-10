@@ -1,0 +1,19 @@
+# Normaliza finales de línea a LF (crítico para los `run:` de los workflows en
+# los runners Linux). Editado en Windows, guardado como LF.
+* text=auto eol=lf
+*.md   text eol=lf
+*.mdx  text eol=lf
+*.mjs  text eol=lf
+*.js   text eol=lf
+*.ts   text eol=lf
+*.json text eol=lf
+*.yml  text eol=lf
+*.yaml text eol=lf
+
+# Binarios: sin conversión.
+*.webp binary
+*.png  binary
+*.jpg  binary
+*.ico  binary
+*.woff binary
+*.woff2 binary
