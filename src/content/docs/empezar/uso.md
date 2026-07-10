@@ -21,7 +21,7 @@ cambia por proyecto son los comandos de tu stack, declarados en
 
 3. Edita `harness.config.json` con los comandos de tu stack. Puedes copiar un
    ejemplo de `examples/` o seguir la
-   [Configuración](/DocsTemplateSSDUncleBob/empezar/configuracion/).
+   [Configuración](/DocsTemplateSSDUncleBob/configuracion/config/).
 
 4. Verifica el entorno con el lanzador de tu plataforma (ver más abajo).
 

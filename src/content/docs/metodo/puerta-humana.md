@@ -28,7 +28,7 @@ En cambio, el `.feature` es solo prosa vuelta contrato. Cambiar un escenario ah�
 
 ## El craftsman_lead para y espera
 
-El [craftsman_lead](/DocsTemplateSSDUncleBob/metodo/craftsman-lead/) es el orquestador. Cuando el `gherkin_author` destila `features/<name>.feature`, la feature pasa a estado `spec_ready` y el orquestador **para**:
+El [craftsman_lead](/DocsTemplateSSDUncleBob/agentes/agentes/) es el orquestador. Cuando el `gherkin_author` destila `features/<name>.feature`, la feature pasa a estado `spec_ready` y el orquestador **para**:
 
 > "Escenarios en `features/<name>.feature`. Léelos y di **'aprobado'** para empezar el ciclo TDD, o pide cambios."
 
@@ -52,4 +52,4 @@ Fuera de esta puerta, el valor humano no está en teclear la solución, sino en 
 
 El borrador es barato; el juicio es el juego entero. La puerta humana concentra ese juicio donde más rinde: en el contrato, antes de que exista una sola línea de producción.
 
-Ver también: [El flujo completo](/DocsTemplateSSDUncleBob/metodo/workflow/) y [Gherkin como contrato](/DocsTemplateSSDUncleBob/metodo/gherkin/).
+Ver también: [El flujo completo](/DocsTemplateSSDUncleBob/metodo/flujo/) y [Gherkin como contrato](/DocsTemplateSSDUncleBob/metodo/gherkin/).
