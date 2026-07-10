@@ -42,4 +42,4 @@ Y por encima de todo queda el humano. Puede **vetar** cualquier Pull Request. El
 - Las propuestas viajan como PR y solo entran si la CI (el arnés) está en verde.
 - El humano puede vetar; no necesita hacer nada más.
 
-Los detalles técnicos del workflow (cómo se dispara, qué acciones ejecuta) se explican aparte, en [El bot de auto-mejora](/DocsTemplateSSDUncleBob/evolucion/bot-auto-mejora/).
+Los detalles técnicos del workflow (cómo se dispara, qué acciones ejecuta) se explican aparte, en [El bot de auto-mejora](/DocsTemplateSSDUncleBob/evolucion/bot/).

@@ -44,6 +44,6 @@ CHANGES_REQUESTED -> progress/judge_<name>.md
 
 ## Una puerta distinta a la mutación
 
-El review no es el final del camino. El [mutation_tester](/DocsTemplateSSDUncleBob/metodo/mutation/) corre **después** de la aprobación del juez. El juez juzga diseño y cobertura de escenarios; la mutación mide si los tests realmente muerden. Son puertas distintas: ambas deben pasar.
+El review no es el final del camino. El [mutation_tester](/DocsTemplateSSDUncleBob/metodo/mutacion/) corre **después** de la aprobación del juez. El juez juzga diseño y cobertura de escenarios; la mutación mide si los tests realmente muerden. Son puertas distintas: ambas deben pasar.
 
 Poda y mutación son las dos formas de este método de separar el borrador barato del trabajo que merece existir. El review es una puerta de **juicio**; la mutación, una puerta de **compute**. Ninguna edita: cada una decide.
