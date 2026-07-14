@@ -44,6 +44,22 @@ El trabajo del humano en esta puerta es breve y concreto:
 
 Solo tras ese "aprobado" el orquestador cambia el status a `in_progress` y lanza el `tdd_craftsman` con el `.feature` y la sección correspondiente de `project-spec.md`.
 
+## Loop Engineering: HITL en la puerta, HOTL en el resto
+
+Un agente no es solo un prompt suelto: es un **bucle** que decide si repetir, verificar, escalar o parar. Esa decisión de verificación —¿hemos cumplido el objetivo?— es lo que distingue un bucle real de una automatización que ejecuta siempre la misma secuencia.
+
+Esa distinción se traduce en dos formas de meter al humano en el bucle:
+
+- **Human-in-the-loop (HITL)**: el sistema se detiene y espera aprobación humana antes de seguir. Prioriza control sobre velocidad; encaja en decisiones de alto riesgo o difíciles de deshacer.
+- **Human-on-the-loop (HOTL)**: el sistema decide y ejecuta de forma autónoma; el humano supervisa el resultado y solo interviene ante una excepción.
+
+Este arnés combina ambos, y a propósito:
+
+- **Una sola puerta HITL**: el `.feature` de Gherkin. Aquí el `craftsman_lead` **para de verdad** y no sigue sin un "aprobado" explícito, porque un escenario mal definido arrastra todo el TDD posterior y corregirlo tarde es caro.
+- **HOTL en el resto**: el ciclo Rojo→Verde→Refactor, el review y la prueba de mutación corren solos. El humano no aprueba cada test; supervisa a través de `progress/*.md` y `feature_list.json` ([handoffs en disco](/DocsTemplateSSDUncleBob/metodo/handoffs/)), e interviene solo si algo se desvía.
+
+> Fuentes: BettaTech, [«¿Qué es esto del Loop Engineering?»](https://www.youtube.com/watch?v=18FeGXyB-sI); webreactiva, [«Loop engineering: qué es y en qué se diferencia del harness»](https://www.webreactiva.com/blog/loop-engineering); n8n, [«Human-in-the-Loop vs. Human-on-the-Loop»](https://blog.n8n.io/human-in-the-loop-vs-human-on-the-loop/).
+
 ## El resto lo talla la disciplina
 
 Fuera de esta puerta, el valor humano no está en teclear la solución, sino en el juicio. Como recuerda el hilo de Uncle Bob:

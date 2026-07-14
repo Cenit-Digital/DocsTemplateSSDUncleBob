@@ -21,6 +21,25 @@ Las entradas se ordenan de más reciente a más antigua. La más nueva arriba.
 
 ## Entradas
 
+### 2026-07-14 — Añade "Loop Engineering" a la puerta humana
+
+En `metodo/puerta-humana.md` se añade la sección "Loop Engineering: HITL en la
+puerta, HOTL en el resto". Cubre un tema del backlog que aún no estaba
+desarrollado: la diferencia entre *human-in-the-loop* (el sistema se detiene y
+espera aprobación) y *human-on-the-loop* (el sistema corre solo y el humano
+supervisa e interviene solo ante una excepción). Se conecta con el diseño real
+del arnés: una única puerta HITL sobre el `.feature` de Gherkin, y HOTL para el
+resto del ciclo (TDD, review, mutación), donde el humano supervisa vía
+`progress/*.md` en vez de aprobar paso a paso.
+
+Motivo: es la primera idea de la playlist de BettaTech
+(*"¿Qué es esto del Loop Engineering?"*, vídeo 1) y todavía no tenía una
+sección propia, a pesar de estar en el backlog de `.github/AUTONOMOUS.md`.
+
+Fuentes: BettaTech, [«¿Qué es esto del Loop Engineering?»](https://www.youtube.com/watch?v=18FeGXyB-sI);
+webreactiva, [«Loop engineering: qué es y en qué se diferencia del harness»](https://www.webreactiva.com/blog/loop-engineering);
+n8n, [«Human-in-the-Loop vs. Human-on-the-Loop»](https://blog.n8n.io/human-in-the-loop-vs-human-on-the-loop/).
+
 ### 2026-07-10 — Corrige enlaces rotos en "Introducción"
 
 En `empezar/introduccion.md`, la sección "Por dónde seguir" enlazaba a slugs
