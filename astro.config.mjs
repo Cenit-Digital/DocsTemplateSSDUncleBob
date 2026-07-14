@@ -74,6 +74,7 @@ export default defineConfig({
           items: [
             { label: 'El ciclo virtuoso', slug: 'evolucion/ciclo-virtuoso' },
             { label: 'El bot de auto-mejora', slug: 'evolucion/bot' },
+            { label: 'Memoria organizacional', slug: 'evolucion/memoria-organizacional' },
             { label: 'Registro de evolución', slug: 'evolucion/changelog' },
           ],
         },

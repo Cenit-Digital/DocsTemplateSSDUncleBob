@@ -21,6 +21,25 @@ Las entradas se ordenan de más reciente a más antigua. La más nueva arriba.
 
 ## Entradas
 
+### 2026-07-14 — Documenta la memoria organizacional (el tercer bucle)
+
+Nueva página `evolucion/memoria-organizacional.md` (más su entrada en el
+sidebar): qué es el repositorio privado `SistemaDeMemoriaUncleBob`, cómo su
+bot mensual destila patrones validados del histórico de los proyectos
+(descubrimiento dinámico de repos por la API, máximo 1-2 patrones por
+ejecución con origen verificable, fusión siempre humana) y cómo cada proyecto
+los consume en el paso 2bis de su Protocolo de arranque.
+
+Motivo: el sistema de memoria organizacional se implementó hoy en la
+organización (la plantilla y WebEmpresa ya llevan el paso 2bis y sus scripts
+de sincronización); esta documentación pública describe el mecanismo — el
+contenido de la memoria es privado por diseño, porque destila proyectos de
+cliente.
+
+Fuentes: [Claude Code GitHub Action](https://code.claude.com/docs/en/github-actions);
+[fine-grained PATs de GitHub](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens);
+implementación: [Cenit-Digital/SistemaDeMemoriaUncleBob](https://github.com/Cenit-Digital/SistemaDeMemoriaUncleBob) (privado).
+
 ### 2026-07-14 — Añade "Loop Engineering" a la puerta humana
 
 En `metodo/puerta-humana.md` se añade la sección "Loop Engineering: HITL en la
