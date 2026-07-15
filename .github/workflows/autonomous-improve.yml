@@ -11,8 +11,16 @@ name: Auto-mejora de la documentación
 
 on:
   schedule:
-    - cron: "0 6 * * 2" # martes 06:00 UTC
-    - cron: "0 6 * * 5" # viernes 06:00 UTC
+    # Martes y viernes. El minuto NO es 0 a propósito: la doc oficial dice que
+    # "High load times include the start of every hour" y que con carga alta
+    # "some queued jobs may be dropped"; recomienda literalmente programar "at a
+    # different time of the hour". Los bots hermanos van a :17, :23, :31 y :43.
+    #
+    # La cadencia (2×/semana) se mantiene: a diferencia de los otros bots, este
+    # se auto-fusiona si la CI pasa, así que sus PRs no se apilan y no necesita
+    # la guarda de "PR abierto" que sí tienen los demás (ver DE-003 en Confluence).
+    - cron: "11 6 * * 2" # martes 06:11 UTC
+    - cron: "11 6 * * 5" # viernes 06:11 UTC
   workflow_dispatch:
     inputs:
       focus:
