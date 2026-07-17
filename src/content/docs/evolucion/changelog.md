@@ -21,6 +21,24 @@ Las entradas se ordenan de más reciente a más antigua. La más nueva arriba.
 
 ## Entradas
 
+### 2026-07-17 — Añade la notación EARS a la fase de spec conversada
+
+En `metodo/spec.md` se añade la sección "EARS: frasear requisitos sin
+ambigüedad": las cinco plantillas de EARS (ubicua, guiada por estado, guiada
+por evento, característica opcional, comportamiento no deseado) y cómo la
+plantilla completa (`While…when…the <sistema> shall…`) mapea casi
+literalmente a Given/When/Then. Se conecta con la regla ya existente de que
+toda afirmación del `project-spec.md` debe poder convertirse en un escenario
+comprobable.
+
+Motivo: es un tema del backlog de `.github/AUTONOMOUS.md`
+("Notación EARS para requisitos y su traducción directa a tests") que aún no
+tenía desarrollo propio. EARS da al `spec_partner` una sintaxis restringida
+concreta para detectar afirmaciones ambiguas antes de que lleguen a Gherkin.
+
+Fuente: Alistair Mavin, [«EARS: Easy Approach to Requirements Syntax»](https://alistairmavin.com/ears/)
+(publicada originalmente en Rolls-Royce PLC, RE'09, 2009).
+
 ### 2026-07-14 — Documenta la memoria organizacional (el tercer bucle)
 
 Nueva página `evolucion/memoria-organizacional.md` (más su entrada en el
