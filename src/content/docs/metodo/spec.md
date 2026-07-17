@@ -57,6 +57,31 @@ una sección por feature:
 - **Casos límite** — enumerados.
 - **Decisiones** — cada una con su razón y la alternativa descartada.
 
+## EARS: frasear requisitos sin ambigüedad
+
+Antes de destilar la spec en Gherkin ayuda fijar cada afirmación con una
+sintaxis restringida. **EARS** (*Easy Approach to Requirements Syntax*),
+desarrollada por Alistair Mavin y su equipo en Rolls-Royce (2009), define
+cinco plantillas que evitan la ambigüedad del lenguaje natural sin la rigidez
+de una notación formal:
+
+| Tipo                       | Plantilla                                                | Ejemplo                                                                |
+| -------------------------- | --------------------------------------------------------- | ----------------------------------------------------------------------- |
+| Ubicua                     | El `<sistema>` **shall** `<respuesta>`                     | El CLI **shall** devolver el código de salida 0 en éxito.               |
+| Guiada por estado          | **While** `<precondición>`, el `<sistema>` **shall** `<respuesta>` | **While** el almacén está vacío, el CLI **shall** imprimir `0`.         |
+| Guiada por evento          | **When** `<disparador>`, el `<sistema>` **shall** `<respuesta>`   | **When** se ejecuta `count`, el CLI **shall** imprimir el total.        |
+| Característica opcional    | **Where** `<funcionalidad incluida>`, el `<sistema>` **shall** `<respuesta>` | **Where** hay flag `--limit`, el CLI **shall** truncar la salida.       |
+| Comportamiento no deseado  | **If** `<disparador>`, **then** el `<sistema>` **shall** `<respuesta>` | **If** el id no existe, **then** el CLI **shall** fallar con código distinto de 0. |
+
+La plantilla completa (`While <precondición>, when <disparador>, the <sistema>
+shall <respuesta>`) mapea casi literalmente a Given/When/Then: la
+precondición es el `Given`, el disparador es el `When`, y el `shall` es el
+`Then`. Si una afirmación del `project-spec.md` no encaja en ninguna de las
+cinco plantillas, probablemente es ambigua y necesita más debate antes de
+pasar a [Gherkin](/DocsTemplateSSDUncleBob/metodo/gherkin/).
+
+Fuente: Alistair Mavin, [«EARS: Easy Approach to Requirements Syntax»](https://alistairmavin.com/ears/).
+
 ## Los límites del agente
 
 El `spec_partner` **para** al terminar la spec. No escribe código, ni tests, ni
