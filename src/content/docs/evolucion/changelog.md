@@ -21,6 +21,24 @@ Las entradas se ordenan de más reciente a más antigua. La más nueva arriba.
 
 ## Entradas
 
+### 2026-07-21 — Sitúa el arnés en los tres niveles del SDD (Böckeler)
+
+En `metodo/gherkin.md` se añade la sección "Los tres niveles del SDD
+(Böckeler)": la distinción de Birgitta Böckeler (Thoughtworks) entre
+spec-first, spec-anchored y spec-as-source, y un análisis de dónde cae este
+arnés (spec-anchored: el `.feature` queda versionado y trazable como fuente de
+verdad, pero el código lo sigue tallando el `tdd_craftsman` a mano vía TDD, no
+se regenera desde la spec). De paso se resume cómo el mismo artículo clasifica
+Kiro, GitHub Spec Kit y Tessl frente a esos tres niveles.
+
+Motivo: cubre "Niveles de SDD (Martin Fowler / Birgitta Böckeler)" del backlog
+de `.github/AUTONOMOUS.md`, que aún no tenía desarrollo propio, y sitúa
+explícitamente el método frente al panorama de herramientas SDD (otro punto
+del mismo backlog), sin necesidad todavía de una comparativa completa aparte.
+
+Fuente: Birgitta Böckeler, blog de Martin Fowler,
+[«Understanding Spec-Driven-Development: Kiro, spec-kit, and Tessl»](https://martinfowler.com/articles/exploring-gen-ai/sdd-3-tools.html).
+
 ### 2026-07-17 — Añade la notación EARS a la fase de spec conversada
 
 En `metodo/spec.md` se añade la sección "EARS: frasear requisitos sin
