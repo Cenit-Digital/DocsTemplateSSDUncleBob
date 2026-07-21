@@ -74,4 +74,35 @@ No usamos un runner BDD (behave, pytest-bdd, cucumber-js) para no añadir depend
 
 El `tdd_craftsman` escribe estos tests uno a uno (Rojo→Verde→Refactor) y deja el mapa en `progress/tdd_<name>.md`. Así el `.feature` sigue siendo la fuente de verdad legible por el humano, sin pagar el coste de un framework.
 
+## Los tres niveles del SDD (Böckeler)
+
+Birgitta Böckeler (Thoughtworks), en el blog de Martin Fowler, distingue tres
+niveles de rigor en el "spec-driven development". Cada uno resuelve un fallo
+del anterior, a cambio de más inversión:
+
+- **Spec-first**: la spec se escribe primero y se usa para la tarea en curso;
+  luego se puede descartar.
+- **Spec-anchored**: la spec se mantiene viva más allá de la tarea, para la
+  evolución y el mantenimiento de la feature.
+- **Spec-as-source**: la spec es el fichero fuente principal con el tiempo;
+  solo la edita el humano, que nunca toca el código directamente.
+
+¿Dónde cae este arnés? En **spec-anchored**. El `.feature` no se descarta al
+cerrar la feature: queda versionado en `features/<name>.feature` como la
+fuente de verdad legible por el humano, y el mapa `@s → test` de
+`progress/tdd_<name>.md` lo mantiene trazable si la feature evoluciona. Pero no
+llega a spec-as-source: el código y los tests los sigue escribiendo el
+`tdd_craftsman` a mano vía TDD, no se regeneran automáticamente desde el
+`.feature`.
+
+El mismo artículo evalúa tres herramientas contra estos niveles: **Kiro** se
+queda en spec-first (sin mecanismo para mantener la spec entre tareas);
+**GitHub Spec Kit** aspira a spec-anchored pero en la práctica sigue siendo
+spec-first (crea una rama por spec en vez de un artefacto vivo); **Tessl** es
+la única que persigue spec-anchored en serio, con exploraciones de
+spec-as-source (código marcado `GENERATED FROM SPEC — DO NOT EDIT`).
+
+Fuente: Birgitta Böckeler, blog de Martin Fowler,
+[«Understanding Spec-Driven-Development: Kiro, spec-kit, and Tessl»](https://martinfowler.com/articles/exploring-gen-ai/sdd-3-tools.html).
+
 Desde aquí, el siguiente paso es el ciclo de [TDD](/DocsTemplateSSDUncleBob/metodo/tdd/).
