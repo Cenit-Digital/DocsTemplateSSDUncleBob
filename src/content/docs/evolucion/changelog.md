@@ -21,6 +21,25 @@ Las entradas se ordenan de más reciente a más antigua. La más nueva arriba.
 
 ## Entradas
 
+### 2026-07-24 — Explica el agent loop: quién ejecuta las herramientas
+
+En `evolucion/bot.md` se añade la sección "El bucle del agente: quién ejecuta
+las herramientas". Aclara, con la documentación oficial del Agent SDK, que el
+modelo nunca ejecuta código ni toca el disco directamente: decide qué
+herramienta usar y con qué parámetros, pero es el proceso que lo envuelve (el
+CLI de Claude Code, aquí corriendo dentro de `claude-code-action`) quien la
+ejecuta de verdad y le devuelve el resultado. Se conecta con el segundo pilar
+de Harness Engineering (orquestación multiagente) ya descrito en
+`empezar/que-es.md`: el `craftsman_lead` orquesta subagentes de la misma
+manera — el arnés ejecuta, el modelo decide.
+
+Motivo: cubre "El agent loop" del backlog de `.github/AUTONOMOUS.md` (bucle
+externo del CLI + bucle agéntico de herramientas; las tools las ejecuta el
+arnés, no la LLM), que aún no tenía desarrollo propio.
+
+Fuente: Anthropic, [«Agent SDK overview»](https://code.claude.com/docs/en/agent-sdk/overview),
+sección "Agent SDK vs Client SDK".
+
 ### 2026-07-21 — Sitúa el arnés en los tres niveles del SDD (Böckeler)
 
 En `metodo/gherkin.md` se añade la sección "Los tres niveles del SDD
