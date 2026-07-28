@@ -21,6 +21,26 @@ Las entradas se ordenan de más reciente a más antigua. La más nueva arriba.
 
 ## Entradas
 
+### 2026-07-28 — Mutadores de producción por stack (Python, Java, Rust)
+
+En `metodo/mutacion.md` se añade la sección "Mutadores de producción en otros
+stacks". Ya existía la recomendación de StrykerJS para Node/TypeScript de
+producción, pero solo eso: se completa con **mutmut** (Python), **PIT/pitest**
+(Java/JVM) y **cargo-mutants** (Rust), cada uno con su comando de instalación,
+cómo declararlo en `commands.mutate` y qué lo distingue (mutmut prioriza
+facilidad de uso; PIT mide *mutation coverage* vía plugin Maven/Gradle;
+cargo-mutants se instala como subcomando de Cargo). Se cierra remarcando que el
+contrato con el arnés no cambia: `commands.mutate` sigue siendo el único punto
+de integración sea cual sea el mutador.
+
+Motivo: cubre "Mutación de producción: guías por stack (StrykerJS, mutmut,
+PIT, cargo-mutants…)" del backlog de `.github/AUTONOMOUS.md`, que solo tenía
+desarrollado el caso de StrykerJS.
+
+Fuentes: [mutmut docs](https://mutmut.readthedocs.io/),
+[PIT (pitest)](https://pitest.org/),
+[cargo-mutants](https://mutants.rs/).
+
 ### 2026-07-24 — Explica el agent loop: quién ejecuta las herramientas
 
 En `evolucion/bot.md` se añade la sección "El bucle del agente: quién ejecuta
