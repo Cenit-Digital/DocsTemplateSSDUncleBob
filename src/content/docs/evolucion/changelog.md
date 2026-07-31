@@ -21,6 +21,28 @@ Las entradas se ordenan de más reciente a más antigua. La más nueva arriba.
 
 ## Entradas
 
+### 2026-07-31 — Documenta dos guardianes del motor contra falsos verdes
+
+En `configuracion/config.md` se documentan dos correcciones recientes de
+`.harness/harness.mjs` en la plantilla: (1) `commands`/`paths` declarados por
+error como string o array (en vez de objeto) ya no se pierden en silencio —
+antes el motor podía reportar verde con "no hay comando de tests declarado"
+aunque el usuario sí lo hubiera escrito; ahora falla explícito con `[FAIL]` y
+código de salida `2`; (2) la sustitución de `{{py}}`/`{{target}}` ya no usa el
+patrón de reemplazo con significado especial de `$` en
+`String.prototype.replace`, así que un target con `$` en la ruta (habitual en
+artefactos JVM/Scala tipo `Outer$Inner`) ya no se corrompe silenciosamente.
+
+Motivo: paso 2 del protocolo de `.github/AUTONOMOUS.md` (sincronización con la
+plantilla). Ambos cambios están fusionados en la plantilla y afectan
+directamente lo que esta página promete sobre `commands` y los tokens; sin
+esta actualización la doc describía un comportamiento (sustitución simple,
+sin validación de tipo) que ya no es el real.
+
+Fuentes: Cenit-Digital/TemplateSSDUncleBob,
+[PR #18 «commands/paths no-objeto fallan legible»](https://github.com/Cenit-Digital/TemplateSSDUncleBob/pull/18),
+[PR #17 «{{target}} con `$` se inserta literal»](https://github.com/Cenit-Digital/TemplateSSDUncleBob/pull/17).
+
 ### 2026-07-28 — Mutadores de producción por stack (Python, Java, Rust)
 
 En `metodo/mutacion.md` se añade la sección "Mutadores de producción en otros

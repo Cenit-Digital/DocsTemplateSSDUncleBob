@@ -37,6 +37,24 @@ Comandos disponibles: `init`, `test`, `mutate [target]`, `verify`, `status`, `he
 - `{{py}}` → se resuelve al intérprete de Python disponible (`python3` o `python`). Útil para portabilidad Windows/Unix.
 - `{{target}}` → en `commands.mutate`, recibe el argumento que pases a `bin/harness mutate <target>`.
 
+El motor inserta ambos valores **tal cual**, sin interpretar `$`: una ruta con
+`$` en el nombre (legal en POSIX y Windows, habitual en artefactos JVM/Scala
+como `Outer$Inner`) no se corrompe. Antes se sustituía con el patrón "string de
+reemplazo" de `String.prototype.replace`, donde `$&`, `$$` o `` $` `` tienen
+significado especial; un target como `src/a$&b.py` acababa mutado a
+`src/a{{target}}b.py` y el mutador corría en silencio sobre una ruta
+equivocada, con riesgo de reportar verde sin medir el módulo declarado.
+
+## Validación de `commands` y `paths`
+
+El motor exige que `commands` y `paths`, si aparecen en el JSON, sean
+**objetos**. Antes, declararlos por error como string o array (por ejemplo
+`"commands": ["go test"]` en vez de `{ "test": "go test" }`) no fallaba: los
+valores por defecto (vacíos) sobrevivían en silencio y `init` podía reportar
+verde con "no hay comando de tests declarado" aunque sí lo hubieras escrito.
+Ahora ese caso falla explícito, con `[FAIL]` legible y código de salida `2`, en
+vez de un falso verde.
+
 ## JSON de ejemplo
 
 ```jsonc
