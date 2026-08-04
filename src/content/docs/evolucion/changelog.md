@@ -21,6 +21,28 @@ Las entradas se ordenan de más reciente a más antigua. La más nueva arriba.
 
 ## Entradas
 
+### 2026-08-04 — Documenta que `init` ya corre tests colocados en `src/` (Go, Rust)
+
+En `configuracion/config.md` se documenta otra corrección de
+`.harness/harness.mjs` en la plantilla: `init` decidía si ejecutar
+`commands.test` mirando solo `paths.tests`. Los stacks que colocan los tests
+junto al código (Go: `_test.go` en el paquete; Rust: `#[cfg(test)]` dentro de
+cada `.rs`) podían no tener carpeta `tests/` en absoluto, así que el motor
+**saltaba** `cargo test`/`go test` con un `[WARN]` y reportaba `[OK]` en verde
+aunque hubiera tests rotos en `src/` — el mismo patrón de falso verde que las
+entradas anteriores. Ahora `init` corre `commands.test` si hay código en
+`paths.tests` **o** en `paths.src`, y solo avisa sin fallar cuando ambos están
+vacíos (la plantilla recién clonada).
+
+Motivo: paso 2 del protocolo de `.github/AUTONOMOUS.md` (sincronización con la
+plantilla). El fix está fusionado en la plantilla el 2026-08-03, un día
+después de la última sincronización registrada aquí; sin esta actualización,
+la doc seguía describiendo el comportamiento antiguo (solo `paths.tests`)
+justo en la sección que explica el guardián de `init`.
+
+Fuente: Cenit-Digital/TemplateSSDUncleBob,
+[PR #19 «init corre los tests si viven en src/ (Go/Rust), no solo en tests/»](https://github.com/Cenit-Digital/TemplateSSDUncleBob/pull/19).
+
 ### 2026-07-31 — Documenta dos guardianes del motor contra falsos verdes
 
 En `configuracion/config.md` se documentan dos correcciones recientes de
