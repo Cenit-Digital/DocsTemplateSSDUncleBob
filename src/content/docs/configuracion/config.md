@@ -55,6 +55,27 @@ verde con "no hay comando de tests declarado" aunque sí lo hubieras escrito.
 Ahora ese caso falla explícito, con `[FAIL]` legible y código de salida `2`, en
 vez de un falso verde.
 
+## `init` corre los tests si viven en `src/` (Go, Rust)
+
+`bin/harness init` decidía si ejecutar `commands.test` mirando **solo** si
+`paths.tests` tenía contenido. Eso asume un layout con carpeta de tests
+separada (habitual en Python/Node), pero no todos los stacks colocan los
+tests ahí:
+
+- **Go**: los `_test.go` viven junto al paquete, no en `tests/`.
+- **Rust**: el grueso de los tests unitarios vive en bloques `#[cfg(test)]`
+  dentro de cada `.rs` en `src/`. Un proyecto que solo tiene esos tests
+  unitarios, siguiendo el `"tests": "tests"` que recomienda
+  `.harness/adapters/rust.md`, no tiene carpeta `tests/` en absoluto.
+
+Antes, ese segundo caso era un **falso verde**: `dirHasFiles(paths.tests)`
+daba `false`, `init` **omitía** `cargo test` con un simple `[WARN]` y
+reportaba `[OK] Entorno listo` con código de salida `0`, aunque hubiera tests
+rotos en `src/`. Ahora `init` corre `commands.test` si hay código en
+`paths.tests` **o** en `paths.src`, y solo avisa sin fallar cuando **ambos**
+están vacíos — el caso real que ese aviso debía cubrir: la plantilla recién
+clonada, antes de escribir ningún test.
+
 ## JSON de ejemplo
 
 ```jsonc
