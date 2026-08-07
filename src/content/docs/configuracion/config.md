@@ -76,6 +76,34 @@ rotos en `src/`. Ahora `init` corre `commands.test` si hay código en
 están vacíos — el caso real que ese aviso debía cubrir: la plantilla recién
 clonada, antes de escribir ningún test.
 
+## `feature_list.json`: `id`/`name` duplicados fallan legible
+
+`validateFeatureList` reportaba `[OK] válido` y código de salida `0` sobre una
+`feature_list.json` con dos features que comparten `id` o `name`, aunque
+ambos campos son claves del pipeline:
+
+- Los agentes referencian una feature por su `id` ("trabaja la feature 3");
+  dos features con `id: 1` hacen ambigua esa orden.
+- El motor **deriva rutas de fichero** del `name`: `features/<name>.feature`
+  (el contrato que aprueba el humano) y, por la convención anti-teléfono-
+  descompuesto del pipeline, `progress/tdd_<name>.md`, `judge_<name>.md`,
+  `mutation_<name>.md`. Dos features con el mismo `name` comparten el
+  **mismo** `.feature`: la puerta de aprobación humana de una tapa a la otra,
+  y sus artefactos de progreso se pisan entre sí.
+
+Ahora el motor falla explícito, en vez de dar el falso verde:
+
+```
+[FAIL]  name duplicado en features: "cli_add" (deriva features/cli_add.feature y progress/*_cli_add.md; debe ser único)
+```
+
+El `id` se normaliza a string antes de comparar, así que `1` y `"1"` (la
+misma "feature 1") cuentan como duplicado. Solo se comparan los valores
+presentes: una feature sin `id`/`name` no dispara el chequeo.
+
+Fuente: Cenit-Digital/TemplateSSDUncleBob,
+[PR #22 «id/name de features duplicados fallan legible, no en falso 'válido'»](https://github.com/Cenit-Digital/TemplateSSDUncleBob/pull/22).
+
 ## JSON de ejemplo
 
 ```jsonc
