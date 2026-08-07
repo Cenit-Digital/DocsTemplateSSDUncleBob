@@ -21,6 +21,28 @@ Las entradas se ordenan de más reciente a más antigua. La más nueva arriba.
 
 ## Entradas
 
+### 2026-08-07 — Documenta el guardián contra `id`/`name` duplicados en `feature_list.json`
+
+En `configuracion/config.md` se documenta otra corrección de
+`.harness/harness.mjs` en la plantilla: `validateFeatureList` reportaba
+`[OK] válido` y salida `0` sobre una `feature_list.json` con dos features que
+comparten `id` o `name`, aunque ambos campos son claves — los agentes
+referencian una feature por su `id`, y el motor deriva de `name` las rutas de
+`features/<name>.feature` y `progress/*_<name>.md`. Dos features con el mismo
+`name` compartían el mismo `.feature`: la puerta de aprobación humana de una
+tapaba a la otra y sus artefactos de progreso se pisaban. Ahora el motor falla
+explícito con `[FAIL]`, la misma familia de guardianes que las entradas
+anteriores de este registro.
+
+Motivo: paso 2 del protocolo de `.github/AUTONOMOUS.md` (sincronización con la
+plantilla). El fix se fusionó en la plantilla hoy mismo, y config.md es donde
+ya se documentan los guardianes previos del motor (commands/paths, mutation,
+sustitución de tokens); sin esta entrada la doc no reflejaba esta protección
+nueva sobre la fuente de verdad de las features.
+
+Fuente: Cenit-Digital/TemplateSSDUncleBob,
+[PR #22 «id/name de features duplicados fallan legible, no en falso 'válido'»](https://github.com/Cenit-Digital/TemplateSSDUncleBob/pull/22).
+
 ### 2026-08-04 — Documenta que `init` ya corre tests colocados en `src/` (Go, Rust)
 
 En `configuracion/config.md` se documenta otra corrección de
