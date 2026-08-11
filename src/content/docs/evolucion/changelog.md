@@ -21,6 +21,33 @@ Las entradas se ordenan de más reciente a más antigua. La más nueva arriba.
 
 ## Entradas
 
+### 2026-08-11 — Documenta dos guardianes más contra falsos verdes en `feature_list.json`
+
+En `configuracion/config.md` se documentan dos correcciones más de
+`.harness/harness.mjs` en la plantilla, ambas de la misma familia que la
+entrada anterior de este registro (id/name duplicados): (1) `bin/harness
+status` descartaba el resultado de `validateFeatureList` y salía siempre con
+código `0`, incluso con un `[FAIL]` impreso encima y un mensaje contradictorio
+de "sin features definidas todavía" sobre una lista que en realidad estaba
+corrupta, no vacía; ahora `status` propaga ese fallo a su exit code, igual que
+ya hacía `init`. (2) El guardián de unicidad de `name` solo comparaba valores
+que ya eran string, así que un `name` numérico o booleano (p. ej. `123` en vez
+de `"123"`) esquivaba el chequeo por completo: dos features con el mismo
+`name: 123` pasaban en verde pese a derivar el mismo `features/123.feature`.
+Un `name` vacío o en blanco tenía el mismo problema. Ahora cada `name`
+presente debe ser un string no vacío o el motor falla explícito.
+
+Motivo: paso 2 del protocolo de `.github/AUTONOMOUS.md` (sincronización con la
+plantilla). Ambos fixes se fusionaron en la plantilla los días 2026-08-07 y
+2026-08-09, después de la última sincronización registrada aquí (PR #22);
+config.md es donde ya se documentan los guardianes previos de esta misma
+familia, así que sin esta entrada la doc describía un motor menos estricto
+del que realmente hay.
+
+Fuentes: Cenit-Digital/TemplateSSDUncleBob,
+[PR #23 «status propaga el fallo de feature_list a su exit code, no en falso verde»](https://github.com/Cenit-Digital/TemplateSSDUncleBob/pull/23),
+[PR #24 «un name de feature no-string/vacío falla legible, no en falso verde»](https://github.com/Cenit-Digital/TemplateSSDUncleBob/pull/24).
+
 ### 2026-08-07 — Documenta el guardián contra `id`/`name` duplicados en `feature_list.json`
 
 En `configuracion/config.md` se documenta otra corrección de
