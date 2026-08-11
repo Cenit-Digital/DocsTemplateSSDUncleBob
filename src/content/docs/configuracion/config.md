@@ -104,6 +104,35 @@ presentes: una feature sin `id`/`name` no dispara el chequeo.
 Fuente: Cenit-Digital/TemplateSSDUncleBob,
 [PR #22 «id/name de features duplicados fallan legible, no en falso 'válido'»](https://github.com/Cenit-Digital/TemplateSSDUncleBob/pull/22).
 
+## `status` propaga el fallo de `feature_list.json` a su código de salida
+
+`bin/harness init` ya salía con código 1 si `validateFeatureList` fallaba, pero
+`bin/harness status` **descartaba** ese resultado: imprimía el `[FAIL]`
+concreto y aun así salía con código `0`. Sobre una `feature_list.json`
+estructuralmente inválida (por ejemplo `"features": 42` en vez de un array),
+el resumen de estado mostraba además `(sin features definidas todavía)` — un
+texto que contradice al `[FAIL]` de encima: la lista no está vacía, está
+corrupta. Ahora `status` termina con `process.exit(v.ok ? 0 : 1)`, y ese
+mensaje de "sin features" solo aparece cuando la lista es **válida y** vacía.
+
+## `name` de feature no-string o vacío falla legible
+
+El guardián de unicidad de `name` (PR #22, arriba) solo compara los valores
+que ya son un string (`typeof f.name === 'string'`). Un `name` que no lo es
+—por ejemplo `"name": 123` o `"name": true`, un simple olvido de comillas— lo
+esquivaba por completo: dos features con el mismo `name: 123` pasaban como
+`[OK] válido` pese a derivar el mismo `features/123.feature`, exactamente el
+choque que la unicidad de `name` existe para evitar. Un `name` vacío o solo
+espacios en blanco tiene el mismo problema: deriva `features/.feature`. Ahora
+cada `name` presente debe ser un string no vacío (tras `trim`); si no lo es,
+el motor falla explícito y `init`/`status` salen con código 1. Una feature sin
+`name` en absoluto no dispara este chequeo — el gate `sdd`/`status` ya la
+detecta por otra vía, al derivar `features/undefined.feature`.
+
+Fuentes: Cenit-Digital/TemplateSSDUncleBob,
+[PR #23 «status propaga el fallo de feature_list a su exit code, no en falso verde»](https://github.com/Cenit-Digital/TemplateSSDUncleBob/pull/23),
+[PR #24 «un name de feature no-string/vacío falla legible, no en falso verde»](https://github.com/Cenit-Digital/TemplateSSDUncleBob/pull/24).
+
 ## JSON de ejemplo
 
 ```jsonc
