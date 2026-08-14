@@ -21,6 +21,37 @@ Las entradas se ordenan de más reciente a más antigua. La más nueva arriba.
 
 ## Entradas
 
+### 2026-08-14 — Documenta tres guardianes más del motor (`rules`, `standalone`, feature SDD sin `name`)
+
+En `configuracion/config.md` se documentan tres correcciones más de
+`.harness/harness.mjs` en la plantilla, todas de la misma familia de
+guardianes contra falsos verdes que las entradas anteriores de este registro:
+(1) `rules` no-objeto (p. ej. `"rules": "estrictas"`) ya no se descarta en
+silencio vía `Object.assign` — era el único de los cuatro contenedores de
+`harness.schema.json` (`commands`, `paths`, `mutation`, `rules`) sin este
+guardián; (2) `standalone` no-booleano (p. ej. `"standalone": "false"`
+entrecomillado) ya no se coercía en silencio a `true`, lo que hacía que un
+sub-proyecto pensado para heredar el arnés raíz fallara con una ráfaga de
+"Falta archivo base" que no señalaba la causa real; de paso, `standalone` se
+añade al schema, donde no estaba pese a togglear esa comprobación; (3) una
+feature `"sdd": true` sin `name` ya no deriva el fichero fantasma
+`features/undefined.feature` en el mensaje de fallo — ahora señala que le
+falta el `name` del que derivar `features/<name>.feature`, y si el `name`
+está presente pero en blanco ya no duplica el `[FAIL]` que el guardián de
+`name` (PR #24) ya reporta.
+
+Motivo: paso 2 del protocolo de `.github/AUTONOMOUS.md` (sincronización con la
+plantilla). Los tres fixes se fusionaron en la plantilla entre el
+2026-08-11 y el 2026-08-13, después de la última sincronización registrada
+aquí (PR #23/#24); config.md es donde ya se documentan los guardianes previos
+de esta misma familia, así que sin esta entrada la doc describía un motor
+menos estricto del que realmente hay.
+
+Fuentes: Cenit-Digital/TemplateSSDUncleBob,
+[PR #25 «un rules no-objeto falla legible, no en descarte mudo»](https://github.com/Cenit-Digital/TemplateSSDUncleBob/pull/25),
+[PR #26 «un standalone no-booleano falla legible, no en coerción muda»](https://github.com/Cenit-Digital/TemplateSSDUncleBob/pull/26),
+[PR #27 «una feature sdd sin name usable culpa al name, no a un fichero fantasma»](https://github.com/Cenit-Digital/TemplateSSDUncleBob/pull/27).
+
 ### 2026-08-11 — Documenta dos guardianes más contra falsos verdes en `feature_list.json`
 
 En `configuracion/config.md` se documentan dos correcciones más de
