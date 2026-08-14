@@ -133,6 +133,55 @@ Fuentes: Cenit-Digital/TemplateSSDUncleBob,
 [PR #23 «status propaga el fallo de feature_list a su exit code, no en falso verde»](https://github.com/Cenit-Digital/TemplateSSDUncleBob/pull/23),
 [PR #24 «un name de feature no-string/vacío falla legible, no en falso verde»](https://github.com/Cenit-Digital/TemplateSSDUncleBob/pull/24).
 
+## `rules` y `standalone` no válidos fallan legible
+
+`harness.schema.json` declara cuatro contenedores como objeto: `commands`,
+`paths`, `mutation` y `rules`. Los tres primeros ya fallaban explícito ante un
+valor mal formado (ver secciones de arriba); `rules` era el único que se
+**descartaba en silencio**: un `"rules": "estrictas"` (o cualquier valor que
+no sea un objeto) no rompía nada, pero tampoco aplicaba lo que el usuario
+escribió — `Object.assign` ignora los primitivos, así que los defaults
+(estrictos) sobrevivían sin avisar de que la config de reglas se había
+ignorado. Ahora falla igual que sus tres hermanos.
+
+`standalone` tenía el mismo problema con un matiz peor: es un campo escalar,
+no un contenedor, y **no estaba en el schema** pese a togglear toda la
+comprobación de ficheros base (`AGENTS.md`, `CLAUDE.md`, …) que hace `init`.
+Un error de mano clásico en JSON — entrecomillar el booleano
+(`"standalone": "false"`) — se coercía en silencio a `true`, así que un
+sub-proyecto que quería heredar el arnés raíz (`standalone: false`) acababa
+comprobando ficheros base que no tiene, y fallaba con una ráfaga de `Falta
+archivo base` que no menciona la causa real. Ahora un `standalone` presente
+y no-booleano falla explícito nombrando la causa; **ausente** sigue asumiendo
+`true` (autónomo), sin cambio de comportamiento por defecto.
+
+Fuentes: Cenit-Digital/TemplateSSDUncleBob,
+[PR #25 «un rules no-objeto falla legible, no en descarte mudo»](https://github.com/Cenit-Digital/TemplateSSDUncleBob/pull/25),
+[PR #26 «un standalone no-booleano falla legible, no en coerción muda»](https://github.com/Cenit-Digital/TemplateSSDUncleBob/pull/26).
+
+## Una feature SDD sin `name` usable culpa al `name`, no a un fichero fantasma
+
+Una feature con `"sdd": true` en un estado que exige spec
+(`spec_ready`/`in_progress`/`done`) deriva la ruta `features/<name>.feature`
+de su `name`. Si el `name` **faltaba por completo**, esa derivación producía
+literalmente `features/undefined.feature`, y el motor fallaba señalando ese
+fichero fantasma en vez de la causa real:
+
+```
+[FAIL]  feature 1 (undefined) en in_progress sin features/undefined.feature
+```
+
+Si el `name` estaba **presente pero en blanco** (`"   "`), el guardián de
+`name` (PR #24, arriba) ya lo reportaba, y esta misma rama añadía un
+**segundo** `[FAIL]` redundante sobre `features/   .feature`. Ahora la
+derivación se guarda: si el `name` falta, el mensaje nombra la causa (`necesita
+un "name" del que derivar features/<name>.feature; falta`) en vez del fichero
+fantasma; si es inválido, esta rama calla porque el guardián de `name` ya lo
+reportó arriba.
+
+Fuente: Cenit-Digital/TemplateSSDUncleBob,
+[PR #27 «una feature sdd sin name usable culpa al name, no a un fichero fantasma»](https://github.com/Cenit-Digital/TemplateSSDUncleBob/pull/27).
+
 ## JSON de ejemplo
 
 ```jsonc
