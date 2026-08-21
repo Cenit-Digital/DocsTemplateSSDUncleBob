@@ -76,6 +76,47 @@ rotos en `src/`. Ahora `init` corre `commands.test` si hay código en
 están vacíos — el caso real que ese aviso debía cubrir: la plantilla recién
 clonada, antes de escribir ningún test.
 
+## `init` no corre el lint sobre un árbol vacío
+
+La misma lógica de la sección anterior (correr `commands.test` solo si hay
+código en `paths.tests` o `paths.src`) no se aplicaba a `commands.lint`: la
+puerta de lint de `init` corría siempre que hubiera un comando declarado, sin
+mirar si había algo que lintar. Muchos linters reales salen con código
+distinto de cero cuando su patrón no casa ningún fichero (por ejemplo ESLint
+con *flat config*, que falla con "No files matching the pattern were found"),
+así que un clon recién hecho de la plantilla que ya declarara `commands.lint`
+fallaba en `init` — el `[FAIL] Lint con errores` aparecía sobre un árbol
+todavía vacío, antes de escribir una sola línea de código. Ahora el gate de
+lint es simétrico al de tests: `[WARN] Sin código todavía … (nada que
+lintar)` y `init` sigue en verde si `paths.tests` y `paths.src` están ambos
+vacíos; con código presente, el linter corre de verdad y un fallo real sigue
+siendo `[FAIL]`.
+
+Fuente: Cenit-Digital/TemplateSSDUncleBob,
+[PR #28 «init no corre el lint sobre un árbol vacío (simétrico al gate de tests, #19)»](https://github.com/Cenit-Digital/TemplateSSDUncleBob/pull/28).
+
+## `verify` no da falso verde si la mutación es obligatoria pero `commands.mutate` está vacío
+
+`bin/harness verify` es la puerta de cierre de sesión: "si `verify` está rojo,
+no marques nada como `done`". Con `rules.require_mutation_to_close: true`
+—el valor por defecto del motor— y `commands.mutate` vacío, la puerta de
+mutación se omitía en silencio dentro de `verify`, que aun así imprimía
+`[verify] Todo verde. Puedes cerrar la sesión.` con código de salida `0`. La
+asimetría que lo delataba: `bin/harness mutate` directo **ya fallaba** ante un
+`commands.mutate` vacío ("declara la prueba de mutación"), pero `verify` —la
+misma puerta, a nivel de sesión— lo silenciaba. Como un scaffold recién creado
+suele no tener mutador declarado todavía, era fácil cerrar una sesión sin
+haber corrido ninguna prueba de mutación. Ahora, si `require_mutation_to_close`
+es `true` y `commands.mutate` está vacío, `verify` aborta con `[FAIL]` y
+código de salida `1`, nombrando las dos salidas legítimas: declarar
+`commands.mutate`, o poner `require_mutation_to_close: false` si el proyecto
+no cierra por mutación. Con `require_mutation_to_close: false` la puerta se
+sigue omitiendo sin ruido, y con un mutador declarado `verify` corre igual que
+antes.
+
+Fuente: Cenit-Digital/TemplateSSDUncleBob,
+[PR #29 «verify no da falso verde si la mutación es obligatoria pero commands.mutate está vacío»](https://github.com/Cenit-Digital/TemplateSSDUncleBob/pull/29).
+
 ## `feature_list.json`: `id`/`name` duplicados fallan legible
 
 `validateFeatureList` reportaba `[OK] válido` y código de salida `0` sobre una
