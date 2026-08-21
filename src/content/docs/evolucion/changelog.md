@@ -21,6 +21,36 @@ Las entradas se ordenan de más reciente a más antigua. La más nueva arriba.
 
 ## Entradas
 
+### 2026-08-21 — Documenta dos guardianes más del motor (`init` lint sobre árbol vacío, `verify` con mutación obligatoria)
+
+En `configuracion/config.md` se documentan dos correcciones más de
+`.harness/harness.mjs` en la plantilla, de la misma familia de guardianes
+contra falsos verdes que las entradas anteriores de este registro: (1) la
+puerta de lint de `init` corría siempre que hubiera un `commands.lint`
+declarado, sin mirar si había código en `paths.tests`/`paths.src` — un clon
+recién hecho de la plantilla podía fallar `init` con `[FAIL] Lint con
+errores` sobre un árbol todavía vacío, porque muchos linters reales (p. ej.
+ESLint con *flat config*) salen con código distinto de cero cuando su patrón
+no casa ningún fichero; ahora el gate de lint es simétrico al de tests (PR
+#19), que ya tenía este cuidado; (2) `verify` — la puerta de cierre de
+sesión — silenciaba en su propio código la puerta de mutación cuando
+`rules.require_mutation_to_close` (el default) es `true` pero
+`commands.mutate` está vacío, e igualmente imprimía "Todo verde. Puedes
+cerrar la sesión." con exit `0`, aunque el comando `mutate` directo ya
+fallaba ante esa misma config; ahora `verify` aborta nombrando la causa y las
+dos salidas legítimas (declarar `commands.mutate`, o desactivar la regla).
+
+Motivo: paso 2 del protocolo de `.github/AUTONOMOUS.md` (sincronización con la
+plantilla). Ambos fixes se fusionaron en la plantilla el 2026-08-14 y el
+2026-08-17, después de la última sincronización registrada aquí (PR #25/#26/#27);
+config.md es donde ya se documentan los guardianes previos de esta misma
+familia, así que sin esta entrada la doc describía un motor menos estricto
+del que realmente hay.
+
+Fuentes: Cenit-Digital/TemplateSSDUncleBob,
+[PR #28 «init no corre el lint sobre un árbol vacío (simétrico al gate de tests, #19)»](https://github.com/Cenit-Digital/TemplateSSDUncleBob/pull/28),
+[PR #29 «verify no da falso verde si la mutación es obligatoria pero commands.mutate está vacío»](https://github.com/Cenit-Digital/TemplateSSDUncleBob/pull/29).
+
 ### 2026-08-14 — Documenta tres guardianes más del motor (`rules`, `standalone`, feature SDD sin `name`)
 
 En `configuracion/config.md` se documentan tres correcciones más de
