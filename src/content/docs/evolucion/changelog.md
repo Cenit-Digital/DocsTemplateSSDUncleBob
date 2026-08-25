@@ -21,6 +21,37 @@ Las entradas se ordenan de más reciente a más antigua. La más nueva arriba.
 
 ## Entradas
 
+### 2026-08-25 — Documenta dos guardianes más del motor (`rules` con flags no-booleanos, `verify` con tests obligatorios)
+
+En `configuracion/config.md` se documentan dos correcciones más de
+`.harness/harness.mjs` en la plantilla, de la misma familia de guardianes
+contra falsos verdes que las entradas anteriores de este registro: (1) el
+guardián de `rules` como objeto (PR #25) no cubría sus **valores** escalares
+— un flag entrecomillado como `"require_mutation_to_close": "false"` produce
+un string truthy, así que la regla que el usuario quería desactivar seguía
+activa y `verify` abortaba con un mensaje que contradecía justo lo que el
+usuario había escrito; ahora cada flag presente en `rules` debe ser un
+booleano sin comillas o el motor falla explícito nombrando la regla y el tipo;
+(2) `verify` —la puerta de cierre de sesión— no enforzaba
+`rules.require_tests_to_close` (el default) en ningún sitio: con
+`commands.test` vacío, `init` solo avisa y sale `0`, y `verify` certificaba
+"Todo verde. Puedes cerrar la sesión." sin que existiera ningún comando de
+tests que ejecutar. Es el hermano simétrico del guardián de mutación
+documentado en la entrada anterior (PR #29); ahora `verify` aborta nombrando
+la causa y las dos salidas legítimas (declarar `commands.test`, o desactivar
+la regla).
+
+Motivo: paso 2 del protocolo de `.github/AUTONOMOUS.md` (sincronización con la
+plantilla). Ambos fixes se fusionaron en la plantilla el 2026-08-21 y el
+2026-08-22, después de la última sincronización registrada aquí (PR #28/#29);
+config.md es donde ya se documentan los guardianes previos de esta misma
+familia, así que sin esta entrada la doc describía un motor menos estricto
+del que realmente hay.
+
+Fuentes: Cenit-Digital/TemplateSSDUncleBob,
+[PR #30 «un flag de rules no-booleano falla legible, no en coerción muda que contradice al usuario»](https://github.com/Cenit-Digital/TemplateSSDUncleBob/pull/30),
+[PR #31 «verify no da falso verde si los tests son obligatorios pero commands.test está vacío (simétrico a #29)»](https://github.com/Cenit-Digital/TemplateSSDUncleBob/pull/31).
+
 ### 2026-08-21 — Documenta dos guardianes más del motor (`init` lint sobre árbol vacío, `verify` con mutación obligatoria)
 
 En `configuracion/config.md` se documentan dos correcciones más de

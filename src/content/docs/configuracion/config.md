@@ -117,6 +117,49 @@ antes.
 Fuente: Cenit-Digital/TemplateSSDUncleBob,
 [PR #29 «verify no da falso verde si la mutación es obligatoria pero commands.mutate está vacío»](https://github.com/Cenit-Digital/TemplateSSDUncleBob/pull/29).
 
+## `rules`: cada flag presente debe ser booleano, no solo el contenedor
+
+El guardián de `rules` como objeto (PR #25, más abajo) solo asegura el
+**contenedor**; sus valores escalares seguían con coerción muda. Entrecomillar
+un booleano en JSON —error de mano clásico, `"require_mutation_to_close":
+"false"`— produce el string `"false"`, que es **truthy**: la regla que el
+usuario quería desactivar seguía activa, y `verify` abortaba imprimiendo
+`require_mutation_to_close es true...`, un mensaje que **contradice** lo que
+el usuario acababa de escribir y lo manda a poner `false` sin comillas, que es
+justo lo que creía haber puesto. Igual con `one_feature_at_a_time: "false"`,
+que seguía exigiendo "máximo 1". Es el hueco que dejó abierto el guardián de
+`standalone` (PR #26): se pensó como "el único campo escalar con coerción
+muda" pero no cubría los flags **anidados** dentro de `rules`. Ahora cada
+flag presente en `rules` (`one_feature_at_a_time`,
+`require_approved_spec_to_implement`, `require_tests_to_close`,
+`require_mutation_to_close`) debe ser un booleano sin comillas o el motor
+falla explícito nombrando la regla y el tipo encontrado; omitir una regla
+sigue siendo válido y usa su valor por defecto.
+
+Fuente: Cenit-Digital/TemplateSSDUncleBob,
+[PR #30 «un flag de rules no-booleano falla legible, no en coerción muda que contradice al usuario»](https://github.com/Cenit-Digital/TemplateSSDUncleBob/pull/30).
+
+## `verify` no da falso verde si los tests son obligatorios pero `commands.test` está vacío
+
+Hermano simétrico del guardián de mutación de arriba (PR #29). De las cuatro
+reglas de `rules`, `require_tests_to_close` (default `true`) era la única que
+el motor declaraba pero no enforzaba en ningún sitio: `init` corre
+`commands.test` cuando hay código, pero con `commands.test` vacío solo
+**avisa** ("No hay comando de tests declarado") y sale `0` — un aviso de
+diseño para el clon limpio de la plantilla. `verify` delegaba en `init` la
+puerta de tests, así que certificaba `Todo verde. Puedes cerrar la sesión.`
+sin que existiera ningún comando de tests que ejecutar, contradiciendo la
+regla que el usuario (o el default) tenía activada. Ahora, si
+`require_tests_to_close` es `true` y `commands.test` está vacío, `verify`
+aborta con `[FAIL]` y código de salida `1`, nombrando las dos salidas
+legítimas: declarar `commands.test`, o poner `require_tests_to_close: false`
+si el proyecto no cierra por tests. La comprobación corre antes que la de
+mutación (orden natural del pipeline: TDD antes que mutación); `init` en la
+raíz no cambia — el `[WARN]` de diseño sigue en verde.
+
+Fuente: Cenit-Digital/TemplateSSDUncleBob,
+[PR #31 «verify no da falso verde si los tests son obligatorios pero commands.test está vacío (simétrico a #29)»](https://github.com/Cenit-Digital/TemplateSSDUncleBob/pull/31).
+
 ## `feature_list.json`: `id`/`name` duplicados fallan legible
 
 `validateFeatureList` reportaba `[OK] válido` y código de salida `0` sobre una
