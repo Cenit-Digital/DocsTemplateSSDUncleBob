@@ -160,6 +160,28 @@ raíz no cambia — el `[WARN]` de diseño sigue en verde.
 Fuente: Cenit-Digital/TemplateSSDUncleBob,
 [PR #31 «verify no da falso verde si los tests son obligatorios pero commands.test está vacío (simétrico a #29)»](https://github.com/Cenit-Digital/TemplateSSDUncleBob/pull/31).
 
+## Un comando solo-espacios cuenta como vacío
+
+Los guardianes de arriba (PR #29 y #31) cazan `commands.mutate`/`commands.test`
+vacíos comprobando `!cfg.commands.X`, para lo que solo `""` es falsy. Un valor
+**solo-espacios** (`"   "`, un desliz de tecla al escribir el JSON a mano) es
+**truthy**: esos guardianes lo leían como "comando declarado", pero el
+ejecutor interno (`run()`) trata un comando en blanco-tras-`trim` como
+**SKIP** y devuelve código `0`. Las dos lecturas se contradecían y reabrían,
+por un espacio, el mismo falso verde que #29/#31 habían cerrado para `""`:
+`mutate` imprimía "Prueba de mutación superada" sin lanzar mutador, e `init`
+"Todos los tests pasan" sin correr la suite — con `verify` certificando el
+cierre de sesión encima de cualquiera de los dos. Ahora el motor recorta con
+`.trim()` todos los valores de `commands` en `loadConfig`, una sola vez, así
+que `"   "` se unifica con `""` y toma la misma rama en **todos** los
+llamadores (`init`, `mutate`, `verify`, lint), sin que cada uno tenga que
+recordar hacer el recorte. Un comando real con espacios de borde (por
+ejemplo `"  go test  "`) se recorta y se sigue ejecutando igual: el trim no
+introduce falsos positivos.
+
+Fuente: Cenit-Digital/TemplateSSDUncleBob,
+[PR #32 «un comando solo-espacios == sin comando, no un falso verde (gemelo de #29/#31)»](https://github.com/Cenit-Digital/TemplateSSDUncleBob/pull/32).
+
 ## `feature_list.json`: `id`/`name` duplicados fallan legible
 
 `validateFeatureList` reportaba `[OK] válido` y código de salida `0` sobre una

@@ -21,6 +21,33 @@ Las entradas se ordenan de más reciente a más antigua. La más nueva arriba.
 
 ## Entradas
 
+### 2026-08-28 — Documenta el guardián contra comandos solo-espacios (`commands.*`)
+
+En `configuracion/config.md` se documenta otra corrección de
+`.harness/harness.mjs` en la plantilla, gemela directa de las dos entradas
+anteriores de este registro (PR #29/#31): esos guardianes cazan
+`commands.mutate`/`commands.test` vacíos con `!cfg.commands.X`, comprobación
+para la que solo `""` es falsy — un valor **solo-espacios** (`"   "`, un
+desliz de tecla) es truthy y se leía como "comando declarado", aunque el
+ejecutor interno trata un comando en blanco-tras-`trim` como SKIP (status
+`0`). El resultado era el mismo falso verde que #29/#31 ya habían cerrado
+para `""`, reabierto por un espacio: `mutate` certificaba "Prueba de mutación
+superada" sin lanzar mutador, `init` "Todos los tests pasan" sin correr
+suite, y `verify` podía certificar el cierre de sesión sobre cualquiera de
+los dos. Ahora `loadConfig` recorta con `.trim()` todos los valores de
+`commands` una sola vez, así que `"   "` se unifica con `""` en todos los
+llamadores; un comando real con espacios de borde se sigue ejecutando igual
+tras el recorte.
+
+Motivo: paso 2 del protocolo de `.github/AUTONOMOUS.md` (sincronización con
+la plantilla). El fix se fusionó en la plantilla el 2026-08-26, después de la
+última sincronización registrada aquí (PR #30/#31); config.md es donde ya se
+documentan los guardianes previos de esta misma familia, así que sin esta
+entrada la doc describía un motor menos estricto del que realmente hay.
+
+Fuente: Cenit-Digital/TemplateSSDUncleBob,
+[PR #32 «un comando solo-espacios == sin comando, no un falso verde (gemelo de #29/#31)»](https://github.com/Cenit-Digital/TemplateSSDUncleBob/pull/32).
+
 ### 2026-08-25 — Documenta dos guardianes más del motor (`rules` con flags no-booleanos, `verify` con tests obligatorios)
 
 En `configuracion/config.md` se documentan dos correcciones más de
