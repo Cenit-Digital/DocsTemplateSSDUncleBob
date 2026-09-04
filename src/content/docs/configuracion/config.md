@@ -210,6 +210,36 @@ presentes: una feature sin `id`/`name` no dispara el chequeo.
 Fuente: Cenit-Digital/TemplateSSDUncleBob,
 [PR #22 «id/name de features duplicados fallan legible, no en falso 'válido'»](https://github.com/Cenit-Digital/TemplateSSDUncleBob/pull/22).
 
+## El `id` de una feature debe ser un escalar
+
+La unicidad de arriba normaliza `id` con `String(f.id)` antes de comparar,
+pero esa coerción no comprobaba de qué **tipo** era el `id` de partida. Un
+`id` no-escalar (un objeto o un array, en vez de olvidar que es un
+identificador simple) no revienta: se coacciona en silencio y rompe la
+identidad de dos formas simétricas, la misma clase de fallo que `name` ya
+tenía cerrada (arriba) pero que `id` —el otro campo-clave— dejaba abierta:
+
+- **Falso rojo**: `String([1])` y `String(1)` son ambos `"1"`, así que
+  `id: [1]` e `id: 1` se reportaban como `id duplicado en features: 1` sin
+  serlo realmente.
+- **Falso verde**, el más grave: dos `id` no-escalares **distintos**
+  (`{}` y `[]`) coaccionan a `"[object Object]"` y `""` — no colisionan — y
+  la lista pasaba como `feature_list.json válido (2 features)` en verde con
+  dos features de identidad rota. `status`, además, las pintaba como
+  `#[object Object]`.
+
+Ahora un `id` PRESENTE debe ser `string` o `number`, o el motor falla
+explícito nombrando el tipo encontrado; solo entonces la unicidad lo
+normaliza a string para comparar. Un `id` ausente o `null` se sigue tratando
+como "sin id" — el campo sigue siendo opcional, igual que antes.
+
+```
+[FAIL]  feature_list.json: el "id" de una feature (feature "cli_add") debe ser un string o un número (encontrado: object); los agentes la referencian por su id, que debe ser único.
+```
+
+Fuente: Cenit-Digital/TemplateSSDUncleBob,
+[PR #33 «el id de una feature debe ser un escalar (hermano de #24)»](https://github.com/Cenit-Digital/TemplateSSDUncleBob/pull/33).
+
 ## `status` propaga el fallo de `feature_list.json` a su código de salida
 
 `bin/harness init` ya salía con código 1 si `validateFeatureList` fallaba, pero

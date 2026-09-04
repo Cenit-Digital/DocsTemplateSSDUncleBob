@@ -21,6 +21,31 @@ Las entradas se ordenan de más reciente a más antigua. La más nueva arriba.
 
 ## Entradas
 
+### 2026-09-04 — Documenta el guardián de `id` no-escalar en `feature_list.json`
+
+En `configuracion/config.md` se documenta otra corrección de
+`.harness/harness.mjs` en la plantilla, hermana directa del guardián de
+`name` (PR #24, ya documentado en este registro): la unicidad de `id`/`name`
+(PR #22) normaliza `id` con `String(f.id)` antes de comparar, pero esa
+coerción nunca comprobó de qué tipo era el `id` de partida. Un `id`
+no-escalar (un objeto o un array) se coaccionaba en silencio y rompía la
+identidad de dos formas simétricas: un **falso rojo** (`id:[1]` e `id:1`
+colisionan como `"1"` sin serlo) y, peor, un **falso verde** (`id:{}` e
+`id:[]` coaccionan a `"[object Object]"` y `""`, no colisionan, y la lista
+certificaba `feature_list.json válido` con dos features de identidad rota).
+Ahora un `id` presente debe ser `string` o `number`, o el motor falla
+explícito nombrando el tipo encontrado; ausente o `null` sigue siendo válido,
+porque el campo sigue siendo opcional.
+
+Motivo: paso 2 del protocolo de `.github/AUTONOMOUS.md` (sincronización con
+la plantilla). El fix se fusionó en la plantilla el 2026-09-02, después de la
+última sincronización registrada aquí (PR #32); config.md es donde ya se
+documentan los guardianes previos de esta misma familia, así que sin esta
+entrada la doc describía un motor menos estricto del que realmente hay.
+
+Fuente: Cenit-Digital/TemplateSSDUncleBob,
+[PR #33 «el id de una feature debe ser un escalar (hermano de #24)»](https://github.com/Cenit-Digital/TemplateSSDUncleBob/pull/33).
+
 ### 2026-08-28 — Documenta el guardián contra comandos solo-espacios (`commands.*`)
 
 En `configuracion/config.md` se documenta otra corrección de
