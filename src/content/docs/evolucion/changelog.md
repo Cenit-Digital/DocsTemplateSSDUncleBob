@@ -21,6 +21,33 @@ Las entradas se ordenan de más reciente a más antigua. La más nueva arriba.
 
 ## Entradas
 
+### 2026-09-08 — Documenta el guardián del flag `sdd` no-booleano en `feature_list.json`
+
+En `configuracion/config.md` se documenta otra corrección de
+`.harness/harness.mjs` en la plantilla, hermana directa de los guardianes de
+`standalone` (PR #26) y de los flags de `rules` (PR #30), ya documentados en
+este registro: `sdd` —el campo que mete una feature en el pipeline SDD y
+activa la puerta de aprobación humana sobre `features/<name>.feature`— se
+leía como truthy crudo (`f.sdd && ...`), sin validar el tipo. Un booleano
+entrecomillado rompía la identidad de dos formas simétricas: un **falso
+rojo** (`sdd: "false"`, string truthy, mete en el pipeline a una feature
+marcada como NO-SDD y `init` falla apuntando al síntoma —falta el
+`.feature`— en vez de a la causa) y, peor, un **falso verde** (`sdd: ""`/`0`/
+`null`, falsy, salta en silencio la puerta de aprobación humana y la lista
+certifica `válido`). Ahora un `sdd` presente debe ser `true` o `false`, o el
+motor falla explícito nombrando el tipo encontrado; la comprobación de aguas
+abajo usa `=== true` para no duplicar el `[FAIL]` sobre el `.feature`
+cuando la causa real ya es el tipo de `sdd`.
+
+Motivo: paso 2 del protocolo de `.github/AUTONOMOUS.md` (sincronización con
+la plantilla). El fix se fusionó en la plantilla el 2026-09-05, después de la
+última sincronización registrada aquí (PR #33); config.md es donde ya se
+documentan los guardianes previos de esta misma familia, así que sin esta
+entrada la doc describía un motor menos estricto del que realmente hay.
+
+Fuente: Cenit-Digital/TemplateSSDUncleBob,
+[PR #34 «el flag sdd de una feature debe ser booleano, no coerción muda que rompe la puerta SDD (hermano de #26/#30)»](https://github.com/Cenit-Digital/TemplateSSDUncleBob/pull/34).
+
 ### 2026-09-04 — Documenta el guardián de `id` no-escalar en `feature_list.json`
 
 En `configuracion/config.md` se documenta otra corrección de
