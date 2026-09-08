@@ -240,6 +240,38 @@ como "sin id" — el campo sigue siendo opcional, igual que antes.
 Fuente: Cenit-Digital/TemplateSSDUncleBob,
 [PR #33 «el id de una feature debe ser un escalar (hermano de #24)»](https://github.com/Cenit-Digital/TemplateSSDUncleBob/pull/33).
 
+## El flag `sdd` de una feature debe ser booleano
+
+`sdd` es el campo de `feature_list.json` que mete una feature en el pipeline
+SDD (spec → Gherkin → TDD → review → mutación) y activa la puerta de
+aprobación humana sobre `features/<name>.feature`. El motor lo leía como
+**truthy crudo** (`if (f.sdd && ...)`), sin validar el tipo — el mismo error
+de mano que ya cerraron `standalone` (PR #26) y los flags de `rules.*`
+(PR #30): un booleano entrecomillado en JSON. Rompía la identidad de la
+feature en dos direcciones:
+
+- **Falso rojo**: `"sdd": "false"` es un string **truthy**, así que una
+  feature que el usuario marcó como NO-SDD entraba igual al pipeline; `init`
+  fallaba con "sin `features/<name>.feature`" — el síntoma, no la causa
+  (`sdd` coaccionado), el mismo desvío que #26 corrigió para `standalone`.
+- **Falso verde**, el más grave: `"sdd": ""`/`0`/`null` son **falsy**, así
+  que la puerta de aprobación humana se **saltaba en silencio** sobre una
+  feature que debía recorrerla, y la lista pasaba como `válido` en verde.
+
+Ahora un `sdd` presente debe ser `true` o `false`, o el motor falla
+explícito nombrando el tipo encontrado; la comprobación de aguas abajo usa
+`f.sdd === true` (no truthy) para no duplicar el `[FAIL]` sobre el `.feature`
+cuando la causa real ya es el tipo de `sdd`, el mismo cuidado que #27 tuvo
+con el `name` ausente. Un `sdd` ausente se sigue tratando como no-SDD (el
+campo sigue siendo opcional).
+
+```
+[FAIL]  feature_list.json: el "sdd" de la feature 1 (cli_add) debe ser true o false (encontrado: string); es el flag que activa el pipeline SDD y su puerta de aprobación humana.
+```
+
+Fuente: Cenit-Digital/TemplateSSDUncleBob,
+[PR #34 «el flag sdd de una feature debe ser booleano, no coerción muda que rompe la puerta SDD (hermano de #26/#30)»](https://github.com/Cenit-Digital/TemplateSSDUncleBob/pull/34).
+
 ## `status` propaga el fallo de `feature_list.json` a su código de salida
 
 `bin/harness init` ya salía con código 1 si `validateFeatureList` fallaba, pero
