@@ -182,6 +182,40 @@ introduce falsos positivos.
 Fuente: Cenit-Digital/TemplateSSDUncleBob,
 [PR #32 «un comando solo-espacios == sin comando, no un falso verde (gemelo de #29/#31)»](https://github.com/Cenit-Digital/TemplateSSDUncleBob/pull/32).
 
+## `mutation.threshold` debe ser un número entre 0 y 1
+
+`harness.schema.json` declara cuatro contenedores de tipo objeto
+(`commands`, `paths`, `mutation`, `rules`); dentro de `mutation`, el campo
+`targets` ya validaba su forma (PR #14), pero `threshold` —la puntuación
+mínima de mutación (proporción de mutantes muertos) que exige la puerta de
+cierre, y que leen tanto el `mutation_tester` como el `craftsman_lead`— era
+el **último campo del schema sin guardián**: el motor lo aceptaba tal cual
+llegara. Tres ediciones a mano equivocadas se colaban en silencio:
+
+- **Entrecomillar el número** (`"threshold": "0.9"`, el mismo desliz que ya
+  cerraron `standalone` (PR #26) y los flags de `rules` (PR #30) para los
+  booleanos): un string, no un número, deja la comparación de puntuación a
+  merced de una coerción implícita.
+- **Confundir proporción con porcentaje** (`"threshold": 90` en vez de
+  `0.9`): una puerta que exige "el 9000 % de mutantes muertos", imposible de
+  superar.
+- **Un valor que ni siquiera es un número** (un array, un objeto): pasaba
+  igual, sin que nada lo señalara.
+
+Ahora, si `mutation.threshold` está **presente**, debe ser un número entre 0
+y 1 (ambos extremos válidos), o el motor falla explícito nombrando el tipo o
+el valor encontrado:
+
+```
+[FAIL]  harness.config.json: "mutation.threshold" debe ser un número entre 0 y 1 (encontrado: string).
+```
+
+Omitir el campo sigue siendo válido: el motor usa el valor por defecto
+(`0.8`), igual que antes.
+
+Fuente: Cenit-Digital/TemplateSSDUncleBob,
+[PR #35 «mutation.threshold no-número o fuera de [0,1] falla legible, no en coerción muda (último campo del schema sin guardián)»](https://github.com/Cenit-Digital/TemplateSSDUncleBob/pull/35).
+
 ## `feature_list.json`: `id`/`name` duplicados fallan legible
 
 `validateFeatureList` reportaba `[OK] válido` y código de salida `0` sobre una

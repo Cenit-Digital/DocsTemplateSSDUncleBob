@@ -21,6 +21,31 @@ Las entradas se ordenan de más reciente a más antigua. La más nueva arriba.
 
 ## Entradas
 
+### 2026-09-11 — Documenta el guardián de `mutation.threshold` fuera de rango o no-numérico
+
+En `configuracion/config.md` se documenta otra corrección de
+`.harness/harness.mjs` en la plantilla: `mutation.threshold` —la puntuación
+mínima de mutación (proporción de mutantes muertos) que exige la puerta de
+cierre, leída tanto por el `mutation_tester` como por el `craftsman_lead`—
+era el último campo de `harness.schema.json` sin guardián de forma; su
+hermano `targets`, dentro del mismo objeto `mutation`, ya lo tenía (PR #14).
+Sin él, tres ediciones a mano equivocadas se colaban en silencio: un número
+entrecomillado (`"0.9"`, el mismo desliz que ya cerraron `standalone` y los
+flags de `rules`), confundir proporción con porcentaje (`90` en vez de
+`0.9`, una puerta imposible de superar) o un valor que ni siquiera es un
+número (array, objeto). Ahora un `threshold` presente debe ser un número
+entre 0 y 1, o el motor falla explícito nombrando el tipo o el valor
+encontrado; omitirlo sigue siendo válido y usa el default (`0.8`).
+
+Motivo: paso 2 del protocolo de `.github/AUTONOMOUS.md` (sincronización con
+la plantilla). El fix se fusionó en la plantilla el 2026-09-09, después de la
+última sincronización registrada aquí (PR #34); config.md es donde ya se
+documentan los guardianes previos de esta misma familia, así que sin esta
+entrada la doc describía un motor menos estricto del que realmente hay.
+
+Fuente: Cenit-Digital/TemplateSSDUncleBob,
+[PR #35 «mutation.threshold no-número o fuera de [0,1] falla legible, no en coerción muda (último campo del schema sin guardián)»](https://github.com/Cenit-Digital/TemplateSSDUncleBob/pull/35).
+
 ### 2026-09-08 — Documenta el guardián del flag `sdd` no-booleano en `feature_list.json`
 
 En `configuracion/config.md` se documenta otra corrección de
