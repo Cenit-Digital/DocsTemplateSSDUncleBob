@@ -21,6 +21,39 @@ Las entradas se ordenan de más reciente a más antigua. La más nueva arriba.
 
 ## Entradas
 
+### 2026-09-15 — Añade los ejemplos Go y Rust, ausentes desde julio
+
+La plantilla tiene **cuatro** ejemplos de referencia verificados al 100 % de
+mutación (`examples/{python,node,go,rust}-notes-cli`, ver su `README.md`),
+pero la sección "Ejemplos verificados" de este sitio solo documentaba dos:
+Python y Node. `go-notes-cli` y `rust-notes-cli` se añadieron a la plantilla
+el 2026-07-18 y el 2026-07-20 respectivamente —antes incluso de la primera
+sincronización registrada en este changelog (2026-07-21)— y ninguna ejecución
+de este bot los había cubierto desde entonces: un hueco que llevaba dos meses
+abierto.
+
+Se añaden `ejemplos/go.md` y `ejemplos/rust.md` (enlazadas en el sidebar de
+`astro.config.mjs`), con la misma estructura que las páginas de Python y
+Node: qué demuestran, su `harness.config.json`, el diseño del mutador propio
+(`tools/mutate.go` sobre `go/scanner`; `tools/mutate.rs`, que además enmascara
+los módulos `#[cfg(test)]` colocados junto al código), sus métricas exactas
+(Go: 35 tests, 66 mutantes, 0 supervivientes, 1 `// mutate: skip` por mutante
+equivalente; Rust: 58 tests, 78 mutantes, 0 supervivientes, sin necesidad de
+`skip`) y la recomendación de mutador de producción de cada adaptador
+(gremlins, cargo-mutants). De paso, `referencia/faq.md` corrige "hay recetas
+para Python, Node/TypeScript y Go" —Rust llevaba su propio adaptador
+documentado desde antes, pero la FAQ nunca lo mencionaba— a los cuatro stacks
+con ejemplo verificado.
+
+Motivo: paso 2 del protocolo de `.github/AUTONOMOUS.md` (sincronización con
+la plantilla): la documentación no debe contradecir la plantilla, y afirmar
+solo "dos ejemplos" mientras la plantilla ya tiene cuatro es exactamente ese
+tipo de desajuste.
+
+Fuentes: Cenit-Digital/TemplateSSDUncleBob,
+[PR #8 «añade examples/go-notes-cli (Go, cero deps, mutación 100%)»](https://github.com/Cenit-Digital/TemplateSSDUncleBob/pull/8),
+[PR #9 «añade examples/rust-notes-cli (Rust, cero deps, mutación 100%)»](https://github.com/Cenit-Digital/TemplateSSDUncleBob/pull/9).
+
 ### 2026-09-11 — Documenta el guardián de `mutation.threshold` fuera de rango o no-numérico
 
 En `configuracion/config.md` se documenta otra corrección de
