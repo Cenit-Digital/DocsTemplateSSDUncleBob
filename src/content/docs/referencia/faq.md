@@ -11,7 +11,7 @@ No. Hay una única puerta humana, y va sobre el contrato: el humano aprueba los 
 
 ## ¿Sirve para mi lenguaje?
 
-Sí. El proceso (spec → Gherkin → TDD → judge → mutación), los agentes y las puertas son **fijos**. Lo único que cambia por proyecto son los comandos de tu stack, declarados en `harness.config.json` bajo `commands` (`test`, `mutate`, y opcionales como `lint` o `build`). Eso es lo que hace a la plantilla agnóstica al lenguaje: hay recetas para Python, Node/TypeScript y Go.
+Sí. El proceso (spec → Gherkin → TDD → judge → mutación), los agentes y las puertas son **fijos**. Lo único que cambia por proyecto son los comandos de tu stack, declarados en `harness.config.json` bajo `commands` (`test`, `mutate`, y opcionales como `lint` o `build`). Eso es lo que hace a la plantilla agnóstica al lenguaje: hay recetas para Python, Node/TypeScript, Go y Rust, con [ejemplos verificados al 100% de mutación](/DocsTemplateSSDUncleBob/ejemplos/python/) para los cuatro.
 
 ## ¿Por qué prueba de mutación si ya tengo tests?
 

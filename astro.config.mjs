@@ -67,6 +67,8 @@ export default defineConfig({
           items: [
             { label: 'Python (notes-cli)', slug: 'ejemplos/python' },
             { label: 'Node/JS (notes-cli)', slug: 'ejemplos/node' },
+            { label: 'Go (notes-cli)', slug: 'ejemplos/go' },
+            { label: 'Rust (notes-cli)', slug: 'ejemplos/rust' },
           ],
         },
         {
