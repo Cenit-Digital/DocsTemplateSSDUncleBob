@@ -216,6 +216,35 @@ Omitir el campo sigue siendo válido: el motor usa el valor por defecto
 Fuente: Cenit-Digital/TemplateSSDUncleBob,
 [PR #35 «mutation.threshold no-número o fuera de [0,1] falla legible, no en coerción muda (último campo del schema sin guardián)»](https://github.com/Cenit-Digital/TemplateSSDUncleBob/pull/35).
 
+## `require_approved_spec_to_implement` es un opt-out real
+
+De las cuatro reglas de `rules`, esta es la que gatea la comprobación de
+`features/<name>.feature` dentro de `validateFeatureList`: esa comprobación
+**es** la enforcement mecánica de la regla —el humano aprueba ese contrato
+Gherkin antes de que el `tdd_craftsman` implemente— para una feature `sdd:
+true` en un estado que ya exige spec (`spec_ready`/`in_progress`/`done`). Pero
+la comprobación corría **incondicionalmente**, ignorando el flag: un usuario
+que declaraba el opt-out `require_approved_spec_to_implement: false` seguía
+**bloqueado** con "sin `features/<name>.feature`", un mensaje que no delata
+que su ajuste se ignoró.
+
+Era la última de las cuatro reglas sin enforcement real. El comentario que
+cerró el guardián simétrico en `verify` (PR #31, arriba) afirmaba que
+`require_tests_to_close` era "la única" regla declarada pero no enforzada
+(`one_feature_at_a_time` y `require_mutation_to_close` sí lo estaban) — pasó
+por alto ésta. Ahora la comprobación se gatea en el flag
+(`cfg.rules.require_approved_spec_to_implement && f.sdd === true &&
+REQUIRES_SPEC.has(f.status)`), simétrico a los opt-out de
+`require_tests_to_close` (#31) y `require_mutation_to_close` (#29) en
+`verify`. Con la regla en `true` —el valor por defecto, y el que usan los
+cuatro ejemplos verificados— la conducta no cambia: el default no se
+debilita, solo se honra el `false` explícito. Con el opt-out activo y sin
+`name`, tampoco hay `features/<name>.feature` que derivar, así que la rama
+que exige el `name` (PR #27, más abajo) también se omite entera.
+
+Fuente: Cenit-Digital/TemplateSSDUncleBob,
+[PR #36 «require_approved_spec_to_implement es un opt-out real, no un flag inerte (4ª regla sin enforcement, hermano de #29/#31)»](https://github.com/Cenit-Digital/TemplateSSDUncleBob/pull/36).
+
 ## `feature_list.json`: `id`/`name` duplicados fallan legible
 
 `validateFeatureList` reportaba `[OK] válido` y código de salida `0` sobre una

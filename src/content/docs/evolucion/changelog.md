@@ -21,6 +21,34 @@ Las entradas se ordenan de más reciente a más antigua. La más nueva arriba.
 
 ## Entradas
 
+### 2026-09-18 — Documenta que `require_approved_spec_to_implement` ya es un opt-out real
+
+En `configuracion/config.md` se documenta otra corrección de
+`.harness/harness.mjs` en la plantilla: la comprobación de
+`features/<name>.feature` dentro de `validateFeatureList` —la enforcement
+mecánica de `require_approved_spec_to_implement`, la regla por defecto que
+exige la spec Gherkin aprobada antes de implementar— corría
+**incondicionalmente**, ignorando el flag. Un usuario que declaraba el
+opt-out `false` seguía bloqueado con "sin `features/<name>.feature`", un
+mensaje que no delataba que su ajuste se había ignorado. Era la última de
+las cuatro reglas de `rules` sin enforcement real: el propio comentario que
+cerró el guardián simétrico de `require_tests_to_close` en `verify` (PR #31,
+ya documentado aquí) había afirmado que esa era "la única" regla declarada
+pero no enforzada, pasando por alto ésta. Ahora la comprobación se gatea en
+el flag, simétrico a los opt-out de `require_tests_to_close` (#31) y
+`require_mutation_to_close` (#29); con la regla en `true` —el default, y lo
+que usan los cuatro ejemplos verificados— la conducta no cambia.
+
+Motivo: paso 2 del protocolo de `.github/AUTONOMOUS.md` (sincronización con
+la plantilla). El fix se fusionó en la plantilla el 2026-09-15, después de
+la última sincronización de este tipo registrada aquí (PR #35); config.md es
+donde ya se documentan los guardianes previos de esta misma familia, así que
+sin esta entrada la doc describía un motor menos estricto del que realmente
+hay.
+
+Fuente: Cenit-Digital/TemplateSSDUncleBob,
+[PR #36 «require_approved_spec_to_implement es un opt-out real, no un flag inerte (4ª regla sin enforcement, hermano de #29/#31)»](https://github.com/Cenit-Digital/TemplateSSDUncleBob/pull/36).
+
 ### 2026-09-15 — Añade los ejemplos Go y Rust, ausentes desde julio
 
 La plantilla tiene **cuatro** ejemplos de referencia verificados al 100 % de
