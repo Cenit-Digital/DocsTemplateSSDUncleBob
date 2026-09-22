@@ -33,6 +33,26 @@ concretos:
 - **Queda versionado.** Los artefactos son ficheros del repositorio: se
   commitean, se revisan y se comparan como cualquier otro código.
 
+## Por qué el contexto se degrada, no solo se llena
+
+Anthropic documenta el motivo técnico: por la arquitectura de los
+transformers, cuantos más tokens hay en la ventana, más se diluye la
+capacidad del modelo para relacionar unos con otros — un efecto que llaman
+**"context rot"**. La recomendación es tratar el contexto como un **recurso
+finito con rendimientos decrecientes**: el objetivo no es llenarlo, sino
+mantener el conjunto más pequeño posible de tokens de alta señal.
+
+La misma guía describe tres técnicas para lograrlo, y esta plantilla aplica
+dos sin nombrarlas: **arquitectura de subagentes** (cada fase la ejecuta un
+agente especializado que devuelve un resumen condensado, no su contexto
+completo) y **notas estructuradas persistidas fuera de la ventana de
+contexto** — exactamente lo que hace cada fichero de `progress/`, que el
+siguiente agente puede releer sin haber vivido la conversación que lo generó.
+
+Fuente: Anthropic,
+[«Effective context engineering for AI agents»](https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents)
+(29 de septiembre de 2025).
+
 ## Mapa de artefactos (quién escribe qué)
 
 Cada fila es un handoff: quién lo escribe y qué contiene. Esta es la memoria
