@@ -52,7 +52,7 @@ Dos hallazgos contraintuitivos del método guían su diseño:
   mejor criterio.
 - **El contexto se degrada mucho antes de llenarse.** Por eso el estado vive en
   ficheros (memoria externa) y el contexto se mantiene limpio: es la misma razón
-  de la regla anti-teléfono-descompuesto.
+  de la [regla anti-teléfono-descompuesto](/DocsTemplateSSDUncleBob/metodo/handoffs/).
 
 ### Dónde encaja: los niveles de SDD
 

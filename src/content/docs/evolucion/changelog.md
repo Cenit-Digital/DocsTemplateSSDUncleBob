@@ -21,6 +21,33 @@ Las entradas se ordenan de más reciente a más antigua. La más nueva arriba.
 
 ## Entradas
 
+### 2026-09-22 — Cita la fuente oficial de "el contexto se degrada, no solo se llena"
+
+En `metodo/handoffs.md` se añade la sección "Por qué el contexto se degrada,
+no solo se llena", con cita a la guía oficial de Anthropic sobre ingeniería de
+contexto: el motivo técnico (el "context rot": a más tokens en la ventana,
+peor la capacidad del modelo de relacionarlos, por cómo escalan las
+relaciones por pares en la arquitectura transformer) y la recomendación de
+tratar el contexto como recurso finito de rendimientos decrecientes. La guía
+describe tres técnicas — compactación, notas estructuradas fuera de la
+ventana y arquitectura de subagentes — y esta plantilla ya aplicaba dos sin
+citarlas: los subagentes que devuelven un resumen condensado (la regla
+anti-teléfono-descompuesto) y los ficheros `progress/*.md` como notas
+persistidas. De paso, `empezar/que-es.md` enlaza su mención breve de esta
+misma idea a la explicación completa.
+
+Motivo: paso 3 del protocolo de `.github/AUTONOMOUS.md` (investigación con
+fuentes oficiales). "Degradación de contexto" es un tema del backlog que ya
+tenía una mención breve en `que-es.md` y en `handoffs.md`, pero sin una fuente
+oficial citada que respaldara la afirmación — justo la regla de "no
+alucines" que pide el protocolo. No hubo sincronización pendiente con la
+plantilla: el PR #37 de `TemplateSSDUncleBob` sigue abierto (sin fusionar) a
+fecha de esta entrada.
+
+Fuente: Anthropic,
+[«Effective context engineering for AI agents»](https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents)
+(29 de septiembre de 2025).
+
 ### 2026-09-18 — Documenta que `require_approved_spec_to_implement` ya es un opt-out real
 
 En `configuracion/config.md` se documenta otra corrección de
