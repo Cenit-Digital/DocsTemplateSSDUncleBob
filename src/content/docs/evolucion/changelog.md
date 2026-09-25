@@ -21,6 +21,32 @@ Las entradas se ordenan de más reciente a más antigua. La más nueva arriba.
 
 ## Entradas
 
+### 2026-09-25 — Cita la fuente oficial del caso `d0` de Vercel y corrige su cifra de velocidad
+
+En `empezar/que-es.md`, la viñeta "Más herramientas = peor rendimiento" citaba
+el caso del agente `d0` de Vercel ("más de 3× de velocidad y un 37 % menos de
+tokens") sin enlazar ninguna fuente propia — la única cita de la sección
+apunta, al final, a la playlist de BettaTech y al blog de Fowler en general,
+ninguno de los dos la fuente primaria del dato. Se enlaza ahora el post
+oficial del blog de Vercel y se corrige la cifra de velocidad, que no era
+"más de 3×" sino **3,5×** (de 274,8 s a 77,4 s de media): un redondeo que
+diluía la magnitud real del resultado. De paso se añaden dos datos del mismo
+post que faltaban y acotan mejor la afirmación — que el caso es un agente
+text-to-SQL concreto, y que la tasa de éxito de sus pruebas subió del 80 % al
+100 % — y se precisa la cifra de tokens (~102k a ~61k) ya presente como
+porcentaje.
+
+Motivo: paso 3 del protocolo de `.github/AUTONOMOUS.md` (investigación con
+fuentes oficiales) y la regla de "no alucines": el punto del backlog "Más
+herramientas = peor rendimiento… Implicación para el diseño de agentes del
+arnés" ya estaba desarrollado en el sitio, pero con un dato aproximado y sin
+la fuente primaria que el propio protocolo exige citar. No había ninguna
+sincronización pendiente con la plantilla: el PR #37 de
+`TemplateSSDUncleBob` sigue abierto (sin fusionar) a fecha de esta entrada.
+
+Fuente: Vercel,
+[«We removed 80% of our agent's tools»](https://vercel.com/blog/we-removed-80-percent-of-our-agents-tools).
+
 ### 2026-09-22 — Cita la fuente oficial de "el contexto se degrada, no solo se llena"
 
 En `metodo/handoffs.md` se añade la sección "Por qué el contexto se degrada,
