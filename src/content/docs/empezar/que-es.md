@@ -46,10 +46,12 @@ envoltorio. Se apoya en tres pilares:
 
 Dos hallazgos contraintuitivos del método guían su diseño:
 
-- **Más herramientas = peor rendimiento.** El agente `d0` de Vercel eliminó el
-  80 % de sus tools hiperespecializadas y dejó utilidades tipo Unix (grep, cat,
-  ls): más de **3× de velocidad y un 37 % menos de tokens**. Menos superficie,
-  mejor criterio.
+- **Más herramientas = peor rendimiento.** El agente `d0` de Vercel (text-to-SQL)
+  eliminó el 80 % de sus tools hiperespecializadas y dejó utilidades tipo Unix
+  (grep, cat, ls) con acceso directo al sistema de ficheros: **3,5× más rápido,
+  un 37 % menos de tokens** (de ~102k a ~61k) y la tasa de éxito de sus pruebas
+  subió del 80 % al 100 %. Menos superficie, mejor criterio.
+  ([fuente oficial: blog de Vercel](https://vercel.com/blog/we-removed-80-percent-of-our-agents-tools)).
 - **El contexto se degrada mucho antes de llenarse.** Por eso el estado vive en
   ficheros (memoria externa) y el contexto se mantiene limpio: es la misma razón
   de la [regla anti-teléfono-descompuesto](/DocsTemplateSSDUncleBob/metodo/handoffs/).
