@@ -21,6 +21,39 @@ Las entradas se ordenan de más reciente a más antigua. La más nueva arriba.
 
 ## Entradas
 
+### 2026-09-29 — Cita la fuente oficial de Anthropic sobre orquestación multiagente en el pilar 2 de Harness Engineering
+
+En `empezar/que-es.md`, el segundo pilar de Harness Engineering
+("Orquestación multiagente — un líder que descompone y lanza subagentes con
+contexto mínimo") no tenía ninguna fuente propia: la cita al final de la
+sección solo apunta, en general, a la playlist de BettaTech y al blog de
+Fowler, ninguno de los dos específico sobre por qué un líder + subagentes
+funciona. Se enlaza ahora el post oficial de Anthropic sobre su propio
+sistema de investigación multiagente, que describe el mismo patrón — líder
+que delega, subagentes con su propia ventana de contexto que condensan su
+trabajo antes de devolverlo — con una precisión importante para no
+sobrestatear la analogía: ese sistema paraleliza la exploración entre
+subagentes, mientras que `craftsman_lead` los lanza en secuencia, fase a
+fase, porque cada fase (spec → Gherkin → TDD → review → mutación) depende
+del artefacto que deja la anterior. No se citan las cifras del post (90,2 %
+de mejora, 90 % menos tiempo de investigación) porque miden su propio
+sistema de investigación en paralelo, no aplicable sin más a un pipeline
+secuencial de una sola feature.
+
+Motivo: paso 3 del protocolo de `.github/AUTONOMOUS.md` (investigación con
+fuentes oficiales) y la regla de "no alucines": el pilar "orquestación
+multiagente" ya estaba desarrollado en el sitio, pero sin una fuente oficial
+propia que respaldara el patrón líder-subagentes, a diferencia de los otros
+dos hallazgos de la misma sección (`d0` de Vercel y degradación de
+contexto), que sí citan su fuente primaria. No había ninguna sincronización
+pendiente con la plantilla: no hay PRs fusionados en
+`Cenit-Digital/TemplateSSDUncleBob` desde el #36 (ya documentado el
+2026-09-18); el PR #37 sigue abierto sin fusionar a fecha de esta entrada.
+
+Fuente: Anthropic,
+[«How we built our multi-agent research system»](https://www.anthropic.com/engineering/multi-agent-research-system)
+(13 de junio de 2025).
+
 ### 2026-09-25 — Cita la fuente oficial del caso `d0` de Vercel y corrige su cifra de velocidad
 
 En `empezar/que-es.md`, la viñeta "Más herramientas = peor rendimiento" citaba
