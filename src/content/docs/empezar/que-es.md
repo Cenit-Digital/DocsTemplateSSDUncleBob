@@ -40,7 +40,19 @@ envoltorio. Se apoya en tres pilares:
 1. **El repositorio como sistema** — la estructura del repo (init, `feature_list`,
    `progress/`, docs, hooks) guía al agente.
 2. **Orquestación multiagente** — un líder que descompone y lanza subagentes con
-   contexto mínimo.
+   contexto mínimo. Anthropic documenta el mismo patrón — un agente líder que
+   delega en subagentes, cada uno con su propia ventana de contexto, que
+   condensan su trabajo antes de devolverlo al líder — en su propio sistema de
+   investigación multiagente. La diferencia es la forma: allí los subagentes
+   exploran **en paralelo** distintos ángulos de una pregunta; aquí
+   `craftsman_lead` los lanza **en secuencia**, fase a fase
+   (`spec_partner` → `gherkin_author` → `tdd_craftsman` → `judge` →
+   `mutation_tester`) sobre una sola feature, porque cada fase depende del
+   artefacto que deja la anterior
+   ([ver el flujo completo](/DocsTemplateSSDUncleBob/metodo/flujo/)).
+   ([fuente oficial: Anthropic, «How we built our multi-agent research
+   system»](https://www.anthropic.com/engineering/multi-agent-research-system),
+   13 de junio de 2025).
 3. **Verificación** — el arnés se autovalida (tests, mutación) porque la IA está
    entrenada para *parecer* verosímil, no para tener razón: debe **demostrar**.
 
