@@ -21,6 +21,37 @@ Las entradas se ordenan de más reciente a más antigua. La más nueva arriba.
 
 ## Entradas
 
+### 2026-10-02 — Cita la fuente oficial de Claude Code sobre verificación en el pilar 3 de Harness Engineering
+
+En `empezar/que-es.md`, el tercer pilar de Harness Engineering ("Verificación
+— el arnés se autovalida… porque la IA está entrenada para parecer verosímil,
+no para tener razón") era, de los tres, el único que seguía sin una fuente
+oficial propia: los otros dos ya la tienen desde entradas anteriores de este
+registro — el pilar 2 (orquestación multiagente) cita el post de Anthropic
+sobre su sistema de investigación multiagente, y el pilar 1 se apoya
+implícitamente en la estructura del propio repo. Se enlaza ahora la guía
+oficial de Claude Code, que plantea el mismo argumento desde el ángulo del
+agente: sin un cheque que pueda ejecutar él mismo, "parece terminado" es la
+única señal disponible, y su patrón de fallo más citado ("the trust-then-verify
+gap") es justo una implementación verosímil que no cubre los casos límite. Su
+recomendación —no enviar nada que no se pueda verificar— es exactamente la
+puerta de tests y mutación que este arnés aplica como enforcement mecánico, no
+como sugerencia.
+
+Motivo: paso 3 del protocolo de `.github/AUTONOMOUS.md` (investigación con
+fuentes oficiales) y la regla de "no alucines": el pilar "Verificación" ya
+estaba desarrollado en el sitio, pero era el único de los tres sin una fuente
+oficial propia que respaldara la afirmación sobre por qué la IA necesita
+demostrar y no solo parecer convincente. No había ninguna sincronización
+pendiente con la plantilla: el único PR nuevo en
+`Cenit-Digital/TemplateSSDUncleBob` desde la última sincronización (PR #36,
+2026-09-15) es el #37, que sigue abierto sin fusionar a fecha de esta entrada.
+
+Fuente: Claude Code docs,
+[«Best practices for Claude Code»](https://code.claude.com/docs/en/best-practices),
+secciones "Give Claude a way to verify its work" y "Avoid common failure
+patterns".
+
 ### 2026-09-29 — Cita la fuente oficial de Anthropic sobre orquestación multiagente en el pilar 2 de Harness Engineering
 
 En `empezar/que-es.md`, el segundo pilar de Harness Engineering
