@@ -55,6 +55,15 @@ envoltorio. Se apoya en tres pilares:
    13 de junio de 2025).
 3. **Verificación** — el arnés se autovalida (tests, mutación) porque la IA está
    entrenada para *parecer* verosímil, no para tener razón: debe **demostrar**.
+   La guía oficial de Claude Code lo plantea desde el ángulo del propio agente:
+   sin un cheque que pueda ejecutar él mismo, "parece terminado" es la única
+   señal disponible, y su patrón de fallo más citado es una implementación
+   verosímil que no cubre los casos límite; la recomendación —no enviar nada
+   que no se pueda verificar— es exactamente la puerta de tests y mutación de
+   este arnés.
+   ([fuente oficial: Claude Code docs, «Best practices for Claude
+   Code»](https://code.claude.com/docs/en/best-practices), secciones "Give
+   Claude a way to verify its work" y "Avoid common failure patterns").
 
 Dos hallazgos contraintuitivos del método guían su diseño:
 
