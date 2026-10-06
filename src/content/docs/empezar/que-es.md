@@ -79,15 +79,18 @@ Dos hallazgos contraintuitivos del método guían su diseño:
 
 ### Dónde encaja: los niveles de SDD
 
-Según el artículo de Birgitta Böckeler en el blog de Martin Fowler, hay tres
-niveles: **spec-first** (escribes la spec y delegas la implementación),
-**spec-anchor** (la spec se mantiene y evoluciona junto al código) y
-**spec-as-source** (la spec es la fuente; el humano nunca toca el código). Este
-arnés vive entre *spec-first* y *spec-anchor*, con una **puerta humana** sobre el
-contrato Gherkin — deliberadamente, no busca eliminar al humano del bucle.
+Birgitta Böckeler (Thoughtworks), en el blog de Martin Fowler, distingue tres
+niveles de rigor en el SDD: **spec-first**, **spec-anchored** y
+**spec-as-source**. Este arnés cae en **spec-anchored**: el `.feature` no se
+descarta al cerrar la feature, queda versionado como fuente de verdad
+trazable, pero el código lo sigue tallando el `tdd_craftsman` a mano vía TDD —
+no se regenera desde la spec, así que no llega a *spec-as-source*. La **puerta
+humana** sobre el contrato Gherkin es deliberada: el arnés no busca eliminar
+al humano del bucle.
 
-> Fuentes: playlist [«Aprende a usar la IA para desarrollar» de BettaTech](https://www.youtube.com/playlist?list=PLJkcleqxxobX8POJ0sMoG62VyyZGrvhM2)
-> y el [blog de Martin Fowler sobre SDD](https://martinfowler.com/).
+Ver el análisis completo —con la fuente y cómo se comparan Kiro, GitHub Spec
+Kit y Tessl frente a estos niveles— en
+[Gherkin: el contrato ejecutable](/DocsTemplateSSDUncleBob/metodo/gherkin/#los-tres-niveles-del-sdd-böckeler).
 
 ## Agnóstico al lenguaje
 
