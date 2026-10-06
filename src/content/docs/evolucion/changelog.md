@@ -21,6 +21,33 @@ Las entradas se ordenan de más reciente a más antigua. La más nueva arriba.
 
 ## Entradas
 
+### 2026-10-06 — Corrige la contradicción sobre en qué nivel de SDD cae el arnés
+
+En `empezar/que-es.md`, la sección "Dónde encaja: los niveles de SDD" afirmaba
+que el arnés vive "entre *spec-first* y *spec-anchor*", citando solo en
+general la playlist de BettaTech y el blog de Fowler. Pero `metodo/gherkin.md`
+ya tiene, desde el 2026-07-21, un análisis más preciso y con fuente directa
+del mismo artículo (Böckeler) que concluye justo lo contrario: el arnés cae
+claramente en **spec-anchored**, no en un punto intermedio, porque el
+`.feature` queda versionado y trazable como fuente de verdad más allá de la
+tarea (el criterio exacto de ese nivel), aunque sin llegar a *spec-as-source*
+porque el código lo sigue tallando el `tdd_craftsman` a mano. Las dos páginas
+se contradecían sobre el mismo hecho. Se corrige `que-es.md` para que refleje
+la misma conclusión que `gherkin.md` y enlace a su análisis completo en vez de
+duplicarlo con una versión más vaga y, de paso, errónea.
+
+Motivo: la regla de "no alucines" y de coherencia entre páginas de
+`.github/AUTONOMOUS.md` ("la documentación no debe contradecir la
+plantilla"), aplicada aquí a dos páginas que se contradecían entre sí; no
+había ninguna mejora de sincronización pendiente con la plantilla
+— el PR #37 de `TemplateSSDUncleBob` sigue abierto sin fusionar desde el
+2026-09-16, y no hay PRs nuevos fusionados desde el #36 (ya documentado aquí
+el 2026-09-18).
+
+Fuente: la ya citada en `metodo/gherkin.md` — Birgitta Böckeler, blog de
+Martin Fowler,
+[«Understanding Spec-Driven-Development: Kiro, spec-kit, and Tessl»](https://martinfowler.com/articles/exploring-gen-ai/sdd-3-tools.html).
+
 ### 2026-10-02 — Cita la fuente oficial de Claude Code sobre verificación en el pilar 3 de Harness Engineering
 
 En `empezar/que-es.md`, el tercer pilar de Harness Engineering ("Verificación
