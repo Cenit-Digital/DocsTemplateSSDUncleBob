@@ -35,13 +35,14 @@ El arnés no impone un mutador: cada stack declara el suyo en `commands.mutate`.
 
 ## Mutadores de producción en otros stacks
 
-El motor cero-dependencias de los ejemplos (`tools/mutate.py`, `tools/mutate.mjs`) sirve para aprender el concepto sin instalar nada, pero un proyecto real en Python, Java o Rust debería declarar en `commands.mutate` el mutador maduro de su ecosistema:
+El motor cero-dependencias de los ejemplos (`tools/mutate.py`, `tools/mutate.mjs`, [`tools/mutate.go`](/DocsTemplateSSDUncleBob/ejemplos/go/)) sirve para aprender el concepto sin instalar nada, pero un proyecto real en Python, Go, Java o Rust debería declarar en `commands.mutate` el mutador maduro de su ecosistema:
 
 - **Python — [mutmut](https://mutmut.readthedocs.io/).** `pip install mutmut` y `"mutate": "mutmut run"`. Se centra en la facilidad de uso: por defecto mutará todo el árbol `src/` salvo que le indiques un target.
+- **Go — [gremlins](https://github.com/go-gremlins/gremlins).** Binario precompilado desde sus *releases* y `"mutate": "gremlins unleash"`. Pensado para módulos pequeños o medianos (microservicios): en módulos muy grandes una ejecución puede tardar horas. Se inspira en PIT.
 - **Java/JVM — [PIT (pitest)](https://pitest.org/).** Se integra como plugin de Maven o Gradle (`"mutate": "mvn org.pitest:pitest-maven:mutationCoverage"`); mide *mutation coverage* en vez de solo cobertura de líneas, que es justo el hueco que la cobertura tradicional no detecta.
 - **Rust — [cargo-mutants](https://mutants.rs/).** `cargo install cargo-mutants` y `"mutate": "cargo mutants"`; inserta mutaciones en el código y comprueba si la suite existente las atrapa.
 
-En los tres casos el contrato con el arnés no cambia: `commands.mutate` en `harness.config.json` sigue siendo el único punto de integración, y el `mutation_tester` sigue midiendo `score` contra `mutation.threshold` sin saber ni importarle qué mutador hay detrás.
+En los cuatro casos el contrato con el arnés no cambia: `commands.mutate` en `harness.config.json` sigue siendo el único punto de integración, y el `mutation_tester` sigue midiendo `score` contra `mutation.threshold` sin saber ni importarle qué mutador hay detrás.
 
 ## Umbral y mutantes equivalentes
 
