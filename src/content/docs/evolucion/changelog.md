@@ -21,6 +21,33 @@ Las entradas se ordenan de más reciente a más antigua. La más nueva arriba.
 
 ## Entradas
 
+### 2026-10-09 — Añade Go/gremlins a los mutadores de producción, ausente en `metodo/mutacion.md`
+
+En `metodo/mutacion.md`, la sección "Mutadores de producción en otros stacks"
+cubría Python (mutmut), Java (PIT) y Rust (cargo-mutants), pero no Go, aunque
+`ejemplos/go.md` y la tabla de `configuracion/adaptadores.md` ya recomiendan
+[gremlins](https://github.com/go-gremlins/gremlins) como mutador de
+producción para ese stack desde el 2026-09-15 (PR #8 de la plantilla). La
+página central del método —la que un lector de `metodo/` consulta primero
+para elegir mutador— se había quedado desalineada con esas dos páginas más
+específicas. Se añade Go a la lista, con su comando (`gremlins unleash`,
+binario precompilado desde sus *releases*), su encaje (módulos pequeños o
+medianos; en módulos muy grandes una ejecución puede tardar horas) y su
+inspiración declarada en PIT, y se enlaza el mutador casero `tools/mutate.go`
+del ejemplo Go junto a sus hermanos Python/Node que ya estaban enlazados.
+
+Motivo: paso 3 del protocolo de `.github/AUTONOMOUS.md` (investigación con
+fuentes oficiales) y la regla de coherencia entre páginas: el backlog "Mutación
+de producción: guías por stack" ya estaba desarrollado para tres stacks, pero
+Go —con ejemplo verificado y mutador de producción documentado en otras dos
+páginas desde hace casi un mes— faltaba justo en la página que centraliza esa
+guía. No había sincronización pendiente con la plantilla: el único PR abierto,
+#37, sigue sin fusionar; no hay PRs nuevos fusionados desde el #36 (ya
+documentado aquí el 2026-09-18).
+
+Fuente: go-gremlins/gremlins,
+[README y documentación oficial](https://github.com/go-gremlins/gremlins).
+
 ### 2026-10-06 — Corrige la contradicción sobre en qué nivel de SDD cae el arnés
 
 En `empezar/que-es.md`, la sección "Dónde encaja: los niveles de SDD" afirmaba
