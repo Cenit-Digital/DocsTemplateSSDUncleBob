@@ -21,6 +21,34 @@ Las entradas se ordenan de más reciente a más antigua. La más nueva arriba.
 
 ## Entradas
 
+### 2026-10-13 — Añade los 5 niveles de verificación de `docs/verification.md`, ausentes en `checkpoints.md`
+
+La plantilla tiene, desde su `docs/verification.md`, un desglose explícito de
+qué significa "la verificación es real" en cinco niveles: tests unitarios,
+test de integración de la interfaz, smoke test manual, trazabilidad de
+escenarios y prueba de mutación — más cuatro anti-patrones nombrados ("debería
+funcionar" sin test, test que solo comprueba ausencia de excepción, mock del
+sistema de ficheros, `done` sin `bin/harness init`). `referencia/checkpoints.md`
+ya cubría la mayoría de estas ideas sueltas en C4, C6 y C7, pero nunca como el
+marco de cinco niveles que la propia plantilla nombra, y le faltaban dos
+niveles enteros: el test de integración de la interfaz (nivel 2) y el smoke
+test manual (nivel 3), ninguno mencionado en el sitio hasta ahora. Se añade la
+sección "Los 5 niveles de verificación" bajo C4, enlazando a TDD (nivel 4) y
+Mutación (nivel 5), que ya tenían su propia página.
+
+Motivo: paso 2 del protocolo de `.github/AUTONOMOUS.md` (sincronización con la
+plantilla): la documentación no debe contradecir ni quedarse corta frente a lo
+que la plantilla ya documenta en su propio `docs/`. No había ningún PR nuevo
+fusionado en `Cenit-Digital/TemplateSSDUncleBob` que sincronizar: el único PR
+abierto, #37, sigue sin fusionar; no hay PRs nuevos fusionados desde el #36
+(ya documentado aquí el 2026-09-15). El hueco no venía de un cambio reciente
+del motor, sino de contenido de `docs/` que nunca se había mirado aparte de
+`docs/gherkin.md`, `docs/tooling.md` y los agentes (ya reflejados en
+`agentes/agentes.mdx` y `metodo/gherkin.md`).
+
+Fuente: Cenit-Digital/TemplateSSDUncleBob,
+[`docs/verification.md`](https://github.com/Cenit-Digital/TemplateSSDUncleBob/blob/main/docs/verification.md).
+
 ### 2026-10-09 — Añade Go/gremlins a los mutadores de producción, ausente en `metodo/mutacion.md`
 
 En `metodo/mutacion.md`, la sección "Mutadores de producción en otros stacks"
