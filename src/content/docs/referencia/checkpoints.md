@@ -31,6 +31,21 @@ Son **agnósticos al lenguaje**: los comandos concretos salen de `harness.config
 - Los tests usan aislamiento real (p. ej. directorios temporales), no mocks de sistema de ficheros.
 - `bin/harness test` muestra > 0 tests y todos verdes.
 
+### Los 5 niveles de verificación
+
+La plantilla desglosa "la verificación es real" en cinco niveles, de obligatorios a recomendados:
+
+1. **Tests unitarios (obligatorio).** Toda función pública en `src/` tiene al menos un test que cubre el camino feliz y, si la función puede fallar, al menos un camino de error.
+2. **Test de integración de la interfaz (obligatorio en features de UI/CLI).** Se ejecuta la interfaz real contra un entorno aislado (directorio temporal, base de datos efímera…), nunca con mocks del sistema de ficheros.
+3. **Smoke test manual (recomendado).** Antes de cerrar, un flujo end-to-end con datos desechables, limpiado después.
+4. **Trazabilidad de escenarios (obligatorio para `"sdd": true`).** Cada `@s` del `.feature` mapea a un test concreto, el mismo mapa que exige C6 (ver [TDD](/DocsTemplateSSDUncleBob/metodo/tdd/)).
+5. **Prueba de mutación (obligatorio para cerrar una feature sdd).** Es C7 (ver [Mutación](/DocsTemplateSSDUncleBob/metodo/mutacion/)).
+
+Y marca cuatro anti-patrones explícitos como "no hacer": afirmar que algo "debería funcionar" sin test ejecutable; un test que solo comprueba que la función no lanza excepción, sin verificar el resultado concreto; mockear el sistema de ficheros en vez de usar aislamiento real; y marcar una feature como `done` sin haber pasado `bin/harness init`.
+
+Fuente: Cenit-Digital/TemplateSSDUncleBob,
+[`docs/verification.md`](https://github.com/Cenit-Digital/TemplateSSDUncleBob/blob/main/docs/verification.md).
+
 ## C5 — La sesión se cerró bien
 
 - No hay archivos sin trackear sospechosos (temporales, cachés fuera del `.gitignore`).
