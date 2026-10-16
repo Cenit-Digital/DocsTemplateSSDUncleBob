@@ -182,6 +182,26 @@ introduce falsos positivos.
 Fuente: Cenit-Digital/TemplateSSDUncleBob,
 [PR #32 «un comando solo-espacios == sin comando, no un falso verde (gemelo de #29/#31)»](https://github.com/Cenit-Digital/TemplateSSDUncleBob/pull/32).
 
+## El objetivo explícito de `mutate <target>` también exige una ruta no vacía
+
+`mutation.targets` en la config ya validaba que cada entrada fuera una ruta no
+vacía (PR #14), pero `bin/harness mutate <target>` tiene una segunda vía para
+llegar al mutador —el objetivo explícito por línea de comandos— que no pasaba
+por ese guardián: se devolvía tal cual, sin validar. El llamador filtra el
+vacío `""` con `process.argv[3] || ''`, pero un objetivo **solo-espacios**
+(`"   "`) es truthy y se colaba hasta `{{target}}` en blanco. Con un mutador
+que sale `0` cuando no recibe ningún módulo que medir, `bin/harness mutate
+"   "` imprimía "Prueba de mutación superada" (exit `0`) sin morder nada: el
+mismo falso verde que el guardián de comandos solo-espacios (arriba) cierra
+para `commands.mutate`, reabierto aquí por una rama que no pasa ni por
+`commands` ni por `mutation.targets`. Ahora un objetivo solo-espacios por CLI
+falla con `[FAIL]` explícito; un objetivo real —con o sin espacios de
+borde— sigue ejecutándose igual, y `verify` (que invoca la mutación sin
+objetivo explícito) no se ve afectado.
+
+Fuente: Cenit-Digital/TemplateSSDUncleBob,
+[PR #37 «`mutate <target>` solo-espacios no da falso verde por la rama explícita (gemelo de #14/#32 en la CLI)»](https://github.com/Cenit-Digital/TemplateSSDUncleBob/pull/37).
+
 ## `mutation.threshold` debe ser un número entre 0 y 1
 
 `harness.schema.json` declara cuatro contenedores de tipo objeto

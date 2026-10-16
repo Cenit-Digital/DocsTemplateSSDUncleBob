@@ -21,6 +21,36 @@ Las entradas se ordenan de más reciente a más antigua. La más nueva arriba.
 
 ## Entradas
 
+### 2026-10-16 — Documenta el guardián contra el objetivo solo-espacios de `mutate <target>` por CLI
+
+En `configuracion/config.md` se documenta otra corrección de
+`.harness/harness.mjs` en la plantilla, gemela de la ya documentada aquí el
+2026-08-28 (PR #32): esa corrección hizo que un comando `commands.mutate`
+solo-espacios se trate como vacío, pero dejó sin tocar una segunda vía hacia
+el mutador —el objetivo explícito de `bin/harness mutate <target>`—, que
+`resolveMutationTargets` devolvía sin el mismo guardián de ruta-no-vacía que
+ya aplicaba a `mutation.targets` (PR #14). Un objetivo solo-espacios
+(`"   "`) por línea de comandos es truthy y colaba un `{{target}}` en blanco
+hasta el mutador: con uno que sale `0` sin módulo que medir, `bin/harness
+mutate "   "` certificaba "Prueba de mutación superada" sin morder nada —el
+mismo falso verde que #32 cerró, reabierto por una rama que no pasa ni por
+`commands` ni por `mutation.targets`. Ahora esa rama también falla legible;
+`verify`, que nunca pasa objetivo explícito, no se ve afectado.
+
+Motivo: paso 2 del protocolo de `.github/AUTONOMOUS.md` (sincronización con
+la plantilla). El fix se fusionó en la plantilla hoy mismo (PR #37), después
+de la última sincronización registrada aquí (PR #36, 2026-09-18); config.md
+es donde ya se documentan los guardianes previos de esta misma familia, así
+que sin esta entrada la doc describía un motor menos estricto del que
+realmente hay. (La plantilla fusionó también hoy el PR #38, que pausa el
+cron diario de *su propio* bot de evolución interno del motor —
+`autonomous-evolve.yml`, distinto del bot de esta documentación— y lo deja en
+modo manual; no afecta a ninguna afirmación de este sitio, que no documenta
+ese workflow interno de la plantilla.)
+
+Fuente: Cenit-Digital/TemplateSSDUncleBob,
+[PR #37 «`mutate <target>` solo-espacios no da falso verde por la rama explícita (gemelo de #14/#32 en la CLI)»](https://github.com/Cenit-Digital/TemplateSSDUncleBob/pull/37).
+
 ### 2026-10-13 — Añade los 5 niveles de verificación de `docs/verification.md`, ausentes en `checkpoints.md`
 
 La plantilla tiene, desde su `docs/verification.md`, un desglose explícito de
